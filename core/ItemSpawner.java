@@ -1,13 +1,14 @@
-package mods.paraknight.core;
+package assets.paraknight.core;
 
 import java.util.List;
+
+import assets.paraknight.lawnmower.EntityLawnMower;
+import assets.paraknight.steambikes.EntityBlackWidow;
+import assets.paraknight.steambikes.EntityMaroonMarauder;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
-import mods.paraknight.lawnmower.EntityLawnMower;
-import mods.paraknight.steambikes.EntityBlackWidow;
-import mods.paraknight.steambikes.EntityMaroonMarauder;
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.creativetab.CreativeTabs;
@@ -51,7 +52,7 @@ public class ItemSpawner extends Item{
 	    float f8 = f3 * f5;
 	    double d3 = 5.0D;
 	    Vec3 vec31 = vec3.addVector((double)f7 * d3, (double)f6 * d3, (double)f8 * d3);
-	    MovingObjectPosition movingobjectposition = par2World.rayTraceBlocks_do(vec3, vec31, true);
+	    MovingObjectPosition movingobjectposition = par2World.clip(vec3, vec31, true);
 	
 	    if (movingobjectposition == null)
 	    {

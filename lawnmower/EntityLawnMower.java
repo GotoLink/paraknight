@@ -1,7 +1,5 @@
-package mods.paraknight.lawnmower;
+package assets.paraknight.lawnmower;
 
-import mods.paraknight.core.EntityChestBoat;
-import mods.paraknight.core.ModPack;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockTallGrass;
 import net.minecraft.entity.item.EntityItem;
@@ -11,6 +9,9 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeHooks;
+import assets.paraknight.core.EntityChestBoat;
+import assets.paraknight.core.ModPack;
+import assets.paraknight.core.SoundHandler;
 
 public class EntityLawnMower extends EntityChestBoat
 {
@@ -73,7 +74,7 @@ public class EntityLawnMower extends EntityChestBoat
     {
         if (this.riddenByEntity != null && this.getFuelTime() > 0)
         {
-            this.worldObj.playSoundAtEntity(this, "lawnmower", 0.1F + (float)(this.speed / 7.0D), (float)(this.speed / 6.0D));
+            this.worldObj.playSoundAtEntity(this, SoundHandler.FOLDER+"lawnmower", 0.1F + (float)(this.speed / 7.0D), (float)(this.speed / 6.0D));
         }
     }
 
@@ -119,10 +120,9 @@ public class EntityLawnMower extends EntityChestBoat
     }
 
     @Override
-    public boolean interact(EntityPlayer var1)
+    public boolean func_130002_c(EntityPlayer var1)
     {
         ItemStack var2 = var1.getCurrentEquippedItem();
-
         if (var2 != null)
         {
             if (var2.itemID == Item.coal.itemID)
@@ -162,18 +162,20 @@ public class EntityLawnMower extends EntityChestBoat
                 }
                 else
                 {
-                    this.worldObj.playSoundAtEntity(this, "ignition", 1.0F, 1.0F);
+                    this.worldObj.playSoundAtEntity(this, SoundHandler.FOLDER+"ignition", 1.0F, 1.0F);
                     if(!this.worldObj.isRemote)
                     	var1.mountEntity(this);
+                    	return true;
                 }
             }
         }
         else
         {
             var1.openGui(ModPack.instance,ModPack.proxy.GUI, this.worldObj,(int)this.posX,(int)this.posY,(int)this.posZ);
+            return false;
         }
+		return false;
 
-        return true;
     }
     @Override
     public void updateRiderPosition()

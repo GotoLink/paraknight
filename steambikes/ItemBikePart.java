@@ -1,4 +1,4 @@
-package mods.paraknight.steambikes;
+package assets.paraknight.steambikes;
 
 import java.util.List;
 
@@ -28,7 +28,7 @@ public class ItemBikePart extends Item{
         return this.icon[j];
     }
 	@SideOnly(Side.CLIENT)
-    public void registerIcons(IconRegister par1IconRegister)
+	public void registerIcons(IconRegister par1IconRegister)
     {
 		this.icon=new Icon[name.length];
 		for(int i=0;i<name.length;i++)

@@ -1,11 +1,12 @@
-package mods.paraknight.steambikes.client;
+package assets.paraknight.steambikes.client;
 
-import mods.paraknight.steambikes.EntitySteamBike;
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.entity.Entity;
+import net.minecraft.util.ResourceLocation;
 
 import org.lwjgl.opengl.GL11;
 
+import assets.paraknight.steambikes.EntitySteamBike;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 @SideOnly(Side.CLIENT)
@@ -29,8 +30,13 @@ public class RenderSteamBike extends Render {
 		/*if(steamBike.riddenByEntity==null)
 			GL11.glRotatef(steamBike.turnAngle*(-20), 0F, 0F, 1F);*/
 		GL11.glScalef(-1F, -1F, 1F);
-		loadTexture(steamBike.getEntityTexture());
+		func_110777_b(steamBike);
+		//loadTexture(steamBike.getEntityTexture());
 		modelSteamBike.render(steamBike);
 		GL11.glPopMatrix();
+	}
+	@Override
+	protected ResourceLocation func_110775_a(Entity entity) {
+		return new ResourceLocation("paraknight",((EntitySteamBike)entity).getEntityTexture());
 	}
 }

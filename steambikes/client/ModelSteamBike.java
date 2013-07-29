@@ -1,6 +1,6 @@
-package mods.paraknight.steambikes.client;
+package assets.paraknight.steambikes.client;
 
-import mods.paraknight.steambikes.EntitySteamBike;
+import assets.paraknight.steambikes.EntitySteamBike;
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.model.ModelRenderer;
 

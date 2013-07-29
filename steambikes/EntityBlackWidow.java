@@ -1,4 +1,4 @@
-package mods.paraknight.steambikes;
+package assets.paraknight.steambikes;
 
 import net.minecraft.world.World;
 
@@ -14,7 +14,7 @@ public class EntityBlackWidow extends EntitySteamBike{
 
 	@Override
 	public String getEntityTexture() {
-        return "/mods/paraknight/textures/models/blackwidowskin.png";
+        return "/textures/models/blackwidowskin.png";
 	}
 
 	@Override

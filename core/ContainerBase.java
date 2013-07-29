@@ -1,4 +1,4 @@
-package mods.paraknight.core;
+package assets.paraknight.core;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
@@ -13,7 +13,6 @@ public class ContainerBase extends Container{
 	protected IInventory inv;
 	public ContainerBase(IInventory ridingEntity, InventoryPlayer playerInv) {
 		this.inv=ridingEntity;
-		ridingEntity.openChest();
 		
 		addSlotToContainer(new SlotSelective(ridingEntity, 0, 30, 35));
 		for (int row=0; row<2; row++)
@@ -21,13 +20,6 @@ public class ContainerBase extends Container{
 				addSlotToContainer(new SlotSelective(ridingEntity, 1+row+(col*2), 102+col*18, 26+row*18));
 		addPlayerSlots(playerInv);
 	}
-
-	@Override
-    public void onCraftGuiClosed(EntityPlayer par1EntityPlayer)
-    {
-        super.onCraftGuiClosed(par1EntityPlayer);
-        this.inv.closeChest();
-    }
 	
 	@Override
 	public boolean canInteractWith(EntityPlayer player) 

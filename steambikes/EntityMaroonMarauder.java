@@ -1,4 +1,4 @@
-package mods.paraknight.steambikes;
+package assets.paraknight.steambikes;
 
 import net.minecraft.world.World;
 
@@ -18,7 +18,7 @@ public class EntityMaroonMarauder extends EntitySteamBike{
 	
 	@Override
 	public String getEntityTexture() {
-        return "/mods/paraknight/textures/models/maroonmarauderskin.png";
+        return "/textures/models/maroonmarauderskin.png";
 	}
 
 	@Override

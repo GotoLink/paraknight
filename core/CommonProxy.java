@@ -1,11 +1,10 @@
-package mods.paraknight.core;
+package assets.paraknight.core;
 
-import mods.paraknight.lawnmower.EntityLawnMower;
-import mods.paraknight.lawnmower.client.EntitySlimeFX;
-import mods.paraknight.steambikes.EntitySteamBike;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.world.World;
+import assets.paraknight.lawnmower.EntityLawnMower;
+import assets.paraknight.steambikes.EntitySteamBike;
 import cpw.mods.fml.common.network.IGuiHandler;
 
 public class CommonProxy implements IGuiHandler{
@@ -15,9 +14,7 @@ public class CommonProxy implements IGuiHandler{
 	@Override
 	public Object getServerGuiElement(int ID, EntityPlayer player, World world, int x, int y, int z) {
 		if(player.ridingEntity!=null && ID==GUI){
-			if( player.ridingEntity instanceof EntitySteamBike)
-				return new ContainerBase((IInventory) player.ridingEntity,player.inventory);
-			else if( player.ridingEntity instanceof EntityLawnMower)
+			if( player.ridingEntity instanceof EntityChestBoat)
 				return new ContainerBase((IInventory) player.ridingEntity,player.inventory);
 		}
 		return null;
@@ -35,7 +32,5 @@ public class CommonProxy implements IGuiHandler{
 	}
 
 	public void registerHandlers() {}
-	@Deprecated
-	public void addSlimeEffect(EntitySlimeFX entitySlimeFX) {}
 
 }

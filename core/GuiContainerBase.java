@@ -1,9 +1,10 @@
-package mods.paraknight.core;
-
-import org.lwjgl.opengl.GL11;
+package assets.paraknight.core;
 
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.inventory.Container;
+import net.minecraft.util.ResourceLocation;
+
+import org.lwjgl.opengl.GL11;
 
 public class GuiContainerBase extends GuiContainer
 {
@@ -16,7 +17,7 @@ public class GuiContainerBase extends GuiContainer
 	@Override
 	protected void drawGuiContainerBackgroundLayer(float f, int i, int j) 
 	{
-		mc.renderEngine.bindTexture("/mods/paraknight/textures/gui/"+background);
+		mc.renderEngine.func_110577_a(new ResourceLocation("paraknight","/textures/gui/"+background));
 		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
         this.drawTexturedModalRect((width-xSize)/2, (height-ySize)/2, 0, 0, xSize, ySize);
 	}

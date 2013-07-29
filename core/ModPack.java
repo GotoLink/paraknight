@@ -1,4 +1,4 @@
-package mods.paraknight.core;
+package assets.paraknight.core;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -8,22 +8,20 @@ import java.io.IOException;
 import java.util.Properties;
 import java.util.logging.Level;
 
-import mods.paraknight.lawnmower.EntityLawnMower;
-import mods.paraknight.lawnmower.client.TickHandler;
-import mods.paraknight.steambikes.EntityBlackWidow;
-import mods.paraknight.steambikes.EntityMaroonMarauder;
-import mods.paraknight.steambikes.ItemBikePart;
 import net.minecraft.block.Block;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import assets.paraknight.lawnmower.EntityLawnMower;
+import assets.paraknight.steambikes.EntityBlackWidow;
+import assets.paraknight.steambikes.EntityMaroonMarauder;
+import assets.paraknight.steambikes.ItemBikePart;
 import cpw.mods.fml.client.FMLClientHandler;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.FMLLog;
 import cpw.mods.fml.common.Mod;
-import cpw.mods.fml.common.Mod.Init;
+import cpw.mods.fml.common.Mod.EventHandler;
 import cpw.mods.fml.common.Mod.Instance;
-import cpw.mods.fml.common.Mod.PreInit;
 import cpw.mods.fml.common.SidedProxy;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
@@ -32,10 +30,9 @@ import cpw.mods.fml.common.network.NetworkRegistry;
 import cpw.mods.fml.common.registry.EntityRegistry;
 import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.common.registry.LanguageRegistry;
-import cpw.mods.fml.common.registry.TickRegistry;
 import cpw.mods.fml.relauncher.Side;
 
-@Mod(modid = "paraknight", name = "Paraknight Mod Pack", version = "1.0")
+@Mod(modid = "paraknight", name = "Paraknight Mod Pack", version = "1.1")
 @NetworkMod(clientSideRequired = true, serverSideRequired = false)
 public class ModPack {
 	@Instance("paraknight")
@@ -44,30 +41,30 @@ public class ModPack {
 	private static int ids[];
 	public static Item ride,wrench,bikePart;
 
-	@SidedProxy(clientSide = "mods.paraknight.core.ClientProxy", serverSide = "mods.paraknight.core.CommonProxy")
+	@SidedProxy(clientSide = "assets.paraknight.core.ClientProxy", serverSide = "assets.paraknight.core.CommonProxy")
 	public static CommonProxy proxy;
 
 	private static boolean enableBikes,enableLawnMower;
 
-	@PreInit
+	@EventHandler
 	public void preLoad(FMLPreInitializationEvent event)
 	{
 		instance=this;
 		ids = getIDs();
 	}
 	
-	@Init
+	@EventHandler
 	public void load(FMLInitializationEvent event) 
 	{
 		if(enableBikes || enableLawnMower){
-			ride = new ItemSpawner(ids[1]).setUnlocalizedName("paraknight:");
-			wrench = new Item(ids[2]).setMaxStackSize(1).setMaxDamage(100).setUnlocalizedName("paraknight:wrench").setCreativeTab(CreativeTabs.tabTransport);	
+			ride = new ItemSpawner(ids[1]).setUnlocalizedName("paraknight:").func_111206_d("paraknight:");
+			wrench = new Item(ids[2]).setMaxStackSize(1).setMaxDamage(100).setUnlocalizedName("paraknight:wrench").setCreativeTab(CreativeTabs.tabTransport).func_111206_d("paraknight:wrench");	
 			LanguageRegistry.instance().addName(wrench, "Wrench");
 			GameRegistry.addShapelessRecipe(new ItemStack(wrench), new Object[] {
 				new ItemStack(Item.ingotIron) , new ItemStack(Item.coal)});
 		}
 		if(enableBikes){
-			bikePart = new ItemBikePart(ids[0]).setUnlocalizedName("steambikes:");
+			bikePart = new ItemBikePart(ids[0]).setUnlocalizedName("steambikes:").func_111206_d("paraknight:");
 			LanguageRegistry.instance().addName(new ItemStack(bikePart,1,0), "Bike Wheel");
 			GameRegistry.addRecipe(new ItemStack(bikePart,1,0), new Object[] {
 				" I ", "IGI", " I ", 'I', Item.ingotIron, 'G', Item.ingotGold });
@@ -138,7 +135,7 @@ public class ModPack {
 	private static File getMinecraftBaseDir() {
 		if (FMLCommonHandler.instance().getSide() == Side.CLIENT)
 	      {
-	          return FMLClientHandler.instance().getClient().getMinecraftDir();
+	          return FMLClientHandler.instance().getClient().getMinecraft().mcDataDir;
 	      }         
 	      return FMLCommonHandler.instance().getMinecraftServerInstance().getFile("");
 	}

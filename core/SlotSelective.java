@@ -1,4 +1,4 @@
-package mods.paraknight.core;
+package assets.paraknight.core;
 
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Slot;
@@ -15,6 +15,6 @@ public class SlotSelective extends Slot
     @Override
     public boolean isItemValid(ItemStack var1)
     {
-        return this.inventory.isStackValidForSlot(slotNumber, var1);
+        return this.inventory.isItemValidForSlot(slotNumber, var1);
     }
 }

@@ -1,16 +1,14 @@
-package mods.paraknight.core;
+package assets.paraknight.core;
 
-import mods.paraknight.lawnmower.EntityLawnMower;
-import mods.paraknight.lawnmower.client.EntitySlimeFX;
-import mods.paraknight.lawnmower.client.RenderLawnMower;
-import mods.paraknight.lawnmower.client.TickHandler;
-import mods.paraknight.steambikes.EntityBlackWidow;
-import mods.paraknight.steambikes.EntityMaroonMarauder;
-import mods.paraknight.steambikes.client.RenderSteamBike;
-import cpw.mods.fml.client.FMLClientHandler;
+import net.minecraft.client.Minecraft;
+import net.minecraftforge.common.MinecraftForge;
+import assets.paraknight.lawnmower.EntityLawnMower;
+import assets.paraknight.lawnmower.client.HUDLawnMower;
+import assets.paraknight.lawnmower.client.RenderLawnMower;
+import assets.paraknight.steambikes.EntityBlackWidow;
+import assets.paraknight.steambikes.EntityMaroonMarauder;
+import assets.paraknight.steambikes.client.RenderSteamBike;
 import cpw.mods.fml.client.registry.RenderingRegistry;
-import cpw.mods.fml.common.registry.TickRegistry;
-import cpw.mods.fml.relauncher.Side;
 
 public class ClientProxy extends CommonProxy{
 	@Override
@@ -20,11 +18,8 @@ public class ClientProxy extends CommonProxy{
 		RenderingRegistry.registerEntityRenderingHandler(EntityBlackWidow.class, new RenderSteamBike());
 		RenderingRegistry.registerEntityRenderingHandler(EntityLawnMower.class, new RenderLawnMower());
 
-		//TickRegistry.registerTickHandler(new TickHandler(), Side.CLIENT);TODO: Fix HUD
-	}
-	@Deprecated
-	@Override
-	public void addSlimeEffect(EntitySlimeFX entitySlimeFX) {
-		//FMLClientHandler.instance().getClient().effectRenderer.addEffect(entitySlimeFX);
+
+		MinecraftForge.EVENT_BUS.register(new HUDLawnMower(Minecraft.getMinecraft()));
+		MinecraftForge.EVENT_BUS.register(new SoundHandler());
 	}
 }

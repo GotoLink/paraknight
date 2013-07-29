@@ -1,7 +1,5 @@
-package mods.paraknight.steambikes;
+package assets.paraknight.steambikes;
 
-import mods.paraknight.core.EntityChestBoat;
-import mods.paraknight.core.ModPack;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -9,6 +7,10 @@ import net.minecraft.util.DamageSource;
 import net.minecraft.world.World;
 
 import org.lwjgl.input.Keyboard;
+
+import assets.paraknight.core.EntityChestBoat;
+import assets.paraknight.core.ModPack;
+import assets.paraknight.core.SoundHandler;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -65,9 +67,9 @@ public abstract class EntitySteamBike extends EntityChestBoat{
 	
 	public void handleSoundEffects() {
 		if(riddenByEntity!=null && this.getFuelTime()>0){
-			worldObj.playSoundAtEntity(this, "purr", 0.1F + (float)(speed/14), (float)(speed/6));
+			worldObj.playSoundAtEntity(this, SoundHandler.FOLDER+"purr", 0.1F + (float)(speed/14), (float)(speed/6));
 			if(this.getFuelTime()<10 && rand.nextInt(75)==0)
-				worldObj.playSoundAtEntity(this, "steam", 0.1F, rand.nextFloat());
+				worldObj.playSoundAtEntity(this, SoundHandler.FOLDER+"steam", 0.1F, rand.nextFloat());
 		}
 	}
 	
@@ -78,7 +80,7 @@ public abstract class EntitySteamBike extends EntityChestBoat{
 	}
 	
 	@Override
-	public boolean interact(EntityPlayer player) {
+	public boolean func_130002_c(EntityPlayer player) {
 		if(Keyboard.isKeyDown(Keyboard.KEY_LCONTROL)) {
 			player.openGui(ModPack.instance,ModPack.proxy.GUI,this.worldObj, (int)this.posX,(int)this.posY,(int)this.posZ);
 			return true;
@@ -107,7 +109,7 @@ public abstract class EntitySteamBike extends EntityChestBoat{
 		}
 		if(!(riddenByEntity != null && riddenByEntity instanceof EntityPlayer && this.riddenByEntity != player)) {
 			if(riddenByEntity==null)
-				worldObj.playSoundAtEntity(this, "ignition", 1F, 1F);
+				worldObj.playSoundAtEntity(this, SoundHandler.FOLDER+"ignition", 1F, 1F);
 			if (!this.worldObj.isRemote)
 				player.mountEntity(this);
 			return true;

@@ -1,4 +1,4 @@
-package mods.paraknight.core;
+package assets.paraknight.core;
 
 import java.util.Iterator;
 import java.util.List;
@@ -7,6 +7,7 @@ import java.util.Random;
 import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityBoat;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
@@ -15,13 +16,14 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
+import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
-public abstract class EntityChestBoat extends EntityBoat implements IInventory{
+public abstract class EntityChestBoat extends Entity implements IInventory{
 	
 	private int boatPosRotationIncrements;
     private double boatX,boatY,boatZ;
@@ -34,17 +36,57 @@ public abstract class EntityChestBoat extends EntityBoat implements IInventory{
     @SideOnly(Side.CLIENT)
     private double velocityZ;
     protected double speedMultiplier;
-    private boolean field_70279_a;
+    private boolean isEmpty;
 	protected ItemStack[] cargo;
 	public double speed = 0;
 	
 	public EntityChestBoat(World par1World) {
 		super(par1World);
-		this.field_70279_a = true;
+		this.isEmpty = true;
 		cargo = new ItemStack[5];
+		this.speedMultiplier = 0.14D;
+        this.preventEntitySpawning = true;
+        this.setSize(1.5F, 0.6F);
+        this.yOffset = this.height / 2.0F;
 	}
+	public EntityChestBoat(World world, double par2, double par4, double par6)
+    {
+    	this(world);
+    	this.setPosition(par2, par4 + (double)this.yOffset, par6);
+        this.motionX = 0.0D;
+        this.motionY = 0.0D;
+        this.motionZ = 0.0D;
+        this.prevPosX = par2;
+        this.prevPosY = par4;
+        this.prevPosZ = par6;
+    }
+    @Override
+    public double getMountedYOffset()
+    {
+        return (double)this.height * 0.0D - 0.30000001192092896D;
+    }
 	@Override
-    public boolean attackEntityFrom(DamageSource source, int par2)
+    public AxisAlignedBB getCollisionBox(Entity par1Entity)
+    {
+        return par1Entity.boundingBox;
+    }
+    @Override
+    public AxisAlignedBB getBoundingBox()
+    {
+        return this.boundingBox;
+    }
+    @Override
+    public boolean canBePushed()
+    {
+        return true;
+    }
+    @Override
+    public boolean canBeCollidedWith()
+    {
+        return !this.isDead;
+    }
+	@Override
+    public boolean attackEntityFrom(DamageSource source, float par2)
     {
     	if (this.isEntityInvulnerable())
 	    {
@@ -52,7 +94,7 @@ public abstract class EntityChestBoat extends EntityBoat implements IInventory{
 	    }
 	    else if (!this.worldObj.isRemote && !this.isDead)
 	    {
-	    	worldObj.playSoundAtEntity(this, "clank", 0.2F, ((rand.nextFloat() - rand.nextFloat()) * 0.7F + 1.0F) * 2.0F);
+	    	worldObj.playSoundAtEntity(this, SoundHandler.FOLDER+"clank", 0.2F, ((rand.nextFloat() - rand.nextFloat()) * 0.7F + 1.0F) * 2.0F);
 			
 	        this.setForwardDirection(-this.getForwardDirection());
 	        this.setTimeSinceHit(10);
@@ -104,7 +146,7 @@ public abstract class EntityChestBoat extends EntityBoat implements IInventory{
 	@SideOnly(Side.CLIENT)
     public void setPositionAndRotation2(double par1, double par3, double par5, float par7, float par8, int par9)
     {
-        if (this.field_70279_a)
+        if (this.isEmpty)
         {
             this.boatPosRotationIncrements = par9 + 5;
         }
@@ -140,16 +182,17 @@ public abstract class EntityChestBoat extends EntityBoat implements IInventory{
         this.velocityY = this.motionY = par3;
         this.velocityZ = this.motionZ = par5;
     }
-    @Override
 	@SideOnly(Side.CLIENT)
     public void func_70270_d(boolean par1)
     {
-        this.field_70279_a = par1;
+        this.isEmpty = par1;
     }
 	@Override
     protected void entityInit()
     {     
-    	super.entityInit();
+		this.dataWatcher.addObject(17, new Integer(0));
+        this.dataWatcher.addObject(18, new Integer(1));
+        this.dataWatcher.addObject(19, new Float(0.0F));
         this.dataWatcher.addObject(25, new Integer(0));
         this.dataWatcher.addObject(26, new Integer(0));
     }
@@ -222,8 +265,8 @@ public abstract class EntityChestBoat extends EntityBoat implements IInventory{
 	}
 	
 	@Override
-	public boolean isStackValidForSlot(int i, ItemStack item) {
-		return i == 0 && item.itemID == Item.coal.itemID ? true : i > 0;
+	public boolean isItemValidForSlot(int i, ItemStack item) {
+		return (i == 0 && item.itemID == Item.coal.itemID) || i > 0;
 	}
 	
 	public int getFuelTime()
@@ -293,7 +336,7 @@ public abstract class EntityChestBoat extends EntityBoat implements IInventory{
 	
 	@Override
 	public void onUpdate() {
-        super.onEntityUpdate();
+        super.onUpdate();
         
         if (this.getTimeSinceHit() > 0)
         {
@@ -318,7 +361,7 @@ public abstract class EntityChestBoat extends EntityBoat implements IInventory{
         double d4;
         double d5;
 
-        if (d3 > 0.26249999999999996D)
+        if (d3 > 0.2625D)
         {
             d4 = Math.cos((double)this.rotationYaw * Math.PI / 180.0D);
             d5 = Math.sin((double)this.rotationYaw * Math.PI / 180.0D);
@@ -327,7 +370,7 @@ public abstract class EntityChestBoat extends EntityBoat implements IInventory{
         double d10;
         double d11;
 
-        if (this.worldObj.isRemote && this.field_70279_a)
+        if (this.worldObj.isRemote && this.isEmpty)
         {
             if (this.boatPosRotationIncrements > 0)
             {
@@ -363,10 +406,16 @@ public abstract class EntityChestBoat extends EntityBoat implements IInventory{
         else
         {
 
-            if (this.riddenByEntity != null)
+            if (this.riddenByEntity != null && this.riddenByEntity instanceof EntityLivingBase)
             {
-                this.motionX += this.riddenByEntity.motionX * this.speedMultiplier;
-                this.motionZ += this.riddenByEntity.motionZ * this.speedMultiplier;
+                d4 = (double)((EntityLivingBase)this.riddenByEntity).moveForward;
+                if (d4 > 0.0D)
+                {
+                    d5 = -Math.sin((double)(this.riddenByEntity.rotationYaw * (float)Math.PI / 180.0F));
+                    double d21 = Math.cos((double)(this.riddenByEntity.rotationYaw * (float)Math.PI / 180.0F));
+                    this.motionX += d5* this.speedMultiplier* 0.05D;
+                    this.motionZ += d21 * this.speedMultiplier* 0.05D;
+                }
             }
 
             d4 = Math.sqrt(this.motionX * this.motionX + this.motionZ * this.motionZ);
@@ -623,4 +672,28 @@ public abstract class EntityChestBoat extends EntityBoat implements IInventory{
 		onInventoryChanged();
 		return true;
 	}
+	public void setDamageTaken(float par1)
+    {
+        this.dataWatcher.updateObject(19, Float.valueOf(par1));
+    }
+    public float getDamageTaken()
+    {
+        return this.dataWatcher.func_111145_d(19);
+    }
+    public void setTimeSinceHit(int par1)
+    {
+        this.dataWatcher.updateObject(17, Integer.valueOf(par1));
+    }
+    public int getTimeSinceHit()
+    {
+        return this.dataWatcher.getWatchableObjectInt(17);
+    }
+    public void setForwardDirection(int par1)
+    {
+        this.dataWatcher.updateObject(18, Integer.valueOf(par1));
+    }
+    public int getForwardDirection()
+    {
+        return this.dataWatcher.getWatchableObjectInt(18);
+    }
 }

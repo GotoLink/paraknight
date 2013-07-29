@@ -1,6 +1,6 @@
-package mods.paraknight.lawnmower.client;
+package assets.paraknight.lawnmower.client;
 
-import mods.paraknight.lawnmower.EntityLawnMower;
+import assets.paraknight.lawnmower.EntityLawnMower;
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.entity.Entity;
