@@ -18,7 +18,7 @@ public class HUDLawnMower extends Gui
     private Minecraft game;
     private int windowWidth;
     private int wave = 0;
-    private final static ResourceLocation hud= new ResourceLocation("paraknight","/textures/gui/lawnmowerhud.png");
+    private final static ResourceLocation hud= new ResourceLocation("paraknight","textures/gui/lawnmowerhud.png");
     public HUDLawnMower(Minecraft var1)
     {
     	super();

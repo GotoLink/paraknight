@@ -17,7 +17,7 @@ public class GuiContainerBase extends GuiContainer
 	@Override
 	protected void drawGuiContainerBackgroundLayer(float f, int i, int j) 
 	{
-		mc.renderEngine.func_110577_a(new ResourceLocation("paraknight","/textures/gui/"+background));
+		mc.renderEngine.func_110577_a(new ResourceLocation("paraknight","textures/gui/"+background));
 		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
         this.drawTexturedModalRect((width-xSize)/2, (height-ySize)/2, 0, 0, xSize, ySize);
 	}

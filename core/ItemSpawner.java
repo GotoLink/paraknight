@@ -26,7 +26,7 @@ import net.minecraft.world.World;
 
 public class ItemSpawner extends Item{
 
-	public static String[] name = new String[]{"maroonmarauder","blackwidow","lawnMower","lawnMowerKey"};
+	public static String[] name = new String[]{"maroonmarauder","blackwidow","lawnmower","lawnmowerkey"};
 	protected Icon[] icon;
 	public ItemSpawner(int id)
 	{

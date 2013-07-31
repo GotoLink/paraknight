@@ -18,7 +18,7 @@ public class EntityMaroonMarauder extends EntitySteamBike{
 	
 	@Override
 	public String getEntityTexture() {
-        return "/textures/models/maroonmarauderskin.png";
+        return "textures/models/maroonmarauderskin.png";
 	}
 
 	@Override

@@ -14,7 +14,7 @@ public class EntityBlackWidow extends EntitySteamBike{
 
 	@Override
 	public String getEntityTexture() {
-        return "/textures/models/blackwidowskin.png";
+        return "textures/models/blackwidowskin.png";
 	}
 
 	@Override
