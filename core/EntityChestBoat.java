@@ -409,13 +409,11 @@ public abstract class EntityChestBoat extends Entity implements IInventory{
             if (this.riddenByEntity != null && this.riddenByEntity instanceof EntityLivingBase)
             {
                 d4 = (double)((EntityLivingBase)this.riddenByEntity).moveForward;
-                if (d4 > 0.0D)
-                {
-                    d5 = -Math.sin((double)(this.riddenByEntity.rotationYaw * (float)Math.PI / 180.0F));
-                    double d21 = Math.cos((double)(this.riddenByEntity.rotationYaw * (float)Math.PI / 180.0F));
-                    this.motionX += d5* this.speedMultiplier* 0.05D;
-                    this.motionZ += d21 * this.speedMultiplier* 0.05D;
-                }
+                d0 = (double)((EntityLivingBase)this.riddenByEntity).moveStrafing;
+                d5 = -Math.sin((double)(this.riddenByEntity.rotationYaw * (float)Math.PI / 180.0F));
+                double d21 = Math.cos((double)(this.riddenByEntity.rotationYaw * (float)Math.PI / 180.0F));
+                this.motionX += (d0*d21 + d5*d4)* this.speedMultiplier;
+                this.motionZ += (d4*d21 - d0*d5) * this.speedMultiplier;
             }
 
             d4 = Math.sqrt(this.motionX * this.motionX + this.motionZ * this.motionZ);
@@ -695,5 +693,10 @@ public abstract class EntityChestBoat extends Entity implements IInventory{
     public int getForwardDirection()
     {
         return this.dataWatcher.getWatchableObjectInt(18);
+    }
+    @Override
+    public boolean canRiderInteract()
+    {
+        return true;
     }
 }
