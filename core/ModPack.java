@@ -49,7 +49,6 @@ public class ModPack {
 	@EventHandler
 	public void preLoad(FMLPreInitializationEvent event)
 	{
-		instance=this;
 		ids = getIDs();
 	}
 	
