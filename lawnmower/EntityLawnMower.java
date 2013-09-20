@@ -120,7 +120,7 @@ public class EntityLawnMower extends EntityChestBoat
     }
 
     @Override
-    public boolean func_130002_c(EntityPlayer var1)
+    public boolean interactFirst(EntityPlayer var1)
     {
         ItemStack var2 = var1.getCurrentEquippedItem();
         if (var2 != null)

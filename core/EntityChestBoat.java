@@ -676,7 +676,7 @@ public abstract class EntityChestBoat extends Entity implements IInventory{
     }
     public float getDamageTaken()
     {
-        return this.dataWatcher.func_111145_d(19);
+        return this.dataWatcher.getWatchableObjectFloat(19);
     }
     public void setTimeSinceHit(int par1)
     {

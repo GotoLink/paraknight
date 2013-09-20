@@ -80,7 +80,7 @@ public abstract class EntitySteamBike extends EntityChestBoat{
 	}
 	
 	@Override
-	public boolean func_130002_c(EntityPlayer player) {
+	public boolean interactFirst(EntityPlayer player) {
 		if(Keyboard.isKeyDown(Keyboard.KEY_LCONTROL)) {
 			player.openGui(ModPack.instance,ModPack.proxy.GUI,this.worldObj, (int)this.posX,(int)this.posY,(int)this.posZ);
 			return true;

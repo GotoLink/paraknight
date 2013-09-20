@@ -47,7 +47,7 @@ public class HUDLawnMower extends Gui
     private void renderBG()
     {
         GL11.glEnable(GL11.GL_BLEND);
-        this.game.renderEngine.func_110577_a(hud);
+        this.game.renderEngine.bindTexture(hud);
         GL11.glColor4f(1.0F, 1.0F, 1.0F, 0.5F);
         /*this.game.ingameGUI.*/drawTexturedModalRect((this.windowWidth - 155) / 2, 0, 0, 0, 155, 44);
         GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
@@ -68,7 +68,7 @@ public class HUDLawnMower extends Gui
 
     private void renderFuelBar(EntityLawnMower var1)
     {
-        this.game.renderEngine.func_110577_a(hud);
+        this.game.renderEngine.bindTexture(hud);
         /*this.game.ingameGUI.*/drawTexturedModalRect((this.windowWidth - 102) / 2 + 19, 15, 0, 44, 102, 8);
 
         if (var1.getFuelTime() <= 15)

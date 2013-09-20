@@ -24,18 +24,18 @@ public class RenderLawnMower extends Render
     public void doRender(Entity var1, double var2, double var4, double var6, float var8, float var9)
     {
         GL11.glPushMatrix();
-        func_110777_b(var1);
+        bindEntityTexture(var1);
         GL11.glTranslatef((float)var2, (float)var4, (float)var6);
         GL11.glRotatef(180.0F - var8, 0.0F, 1.0F, 0.0F);
         GL11.glScalef(-1.0F, -1.0F, 1.0F);
         this.modelLawnMower.renderBody(var1, 0.0F, 0.0F, -0.1F, 0.0F, 0.0F, 0.0625F);
-        this.func_110776_a(blades);
+        this.bindTexture(blades);
         this.modelLawnMower.renderBlades((EntityLawnMower)var1);
         GL11.glPopMatrix();
     }
 
 	@Override
-	protected ResourceLocation func_110775_a(Entity entity) {
+	protected ResourceLocation getEntityTexture(Entity entity) {
 		return body;
 	}
 }

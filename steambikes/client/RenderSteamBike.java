@@ -30,13 +30,13 @@ public class RenderSteamBike extends Render {
 		/*if(steamBike.riddenByEntity==null)
 			GL11.glRotatef(steamBike.turnAngle*(-20), 0F, 0F, 1F);*/
 		GL11.glScalef(-1F, -1F, 1F);
-		func_110777_b(steamBike);
+		bindEntityTexture(steamBike);
 		//loadTexture(steamBike.getEntityTexture());
 		modelSteamBike.render(steamBike);
 		GL11.glPopMatrix();
 	}
 	@Override
-	protected ResourceLocation func_110775_a(Entity entity) {
+	protected ResourceLocation getEntityTexture(Entity entity) {
 		return new ResourceLocation("paraknight",((EntitySteamBike)entity).getEntityTexture());
 	}
 }
