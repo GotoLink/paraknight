@@ -24,6 +24,8 @@ public abstract class EntitySteamBike extends EntityChestBoat{
 		this.setSize(2.5F, 1F);
 		this.stepHeight = 1F;
 		this.speedMultiplier=1/this.getFrictionFactor();
+		this.maxSpeed=2/this.getFrictionFactor();
+		this.minSpeed=0.5D/this.getFrictionFactor();
 	}
 	
 	public EntitySteamBike(World world, double d, double e, double f) {

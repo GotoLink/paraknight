@@ -35,7 +35,7 @@ public abstract class EntityChestBoat extends Entity implements IInventory{
     private double velocityY;
     @SideOnly(Side.CLIENT)
     private double velocityZ;
-    protected double speedMultiplier;
+    protected double speedMultiplier,maxSpeed, minSpeed;
     private boolean isEmpty;
 	protected ItemStack[] cargo;
 	public double speed = 0;
@@ -45,6 +45,8 @@ public abstract class EntityChestBoat extends Entity implements IInventory{
 		this.isEmpty = true;
 		cargo = new ItemStack[5];
 		this.speedMultiplier = 0.14D;
+		this.maxSpeed = 0.35D;
+		this.minSpeed = 0.07D;
         this.preventEntitySpawning = true;
         this.setSize(1.5F, 0.6F);
         this.yOffset = this.height / 2.0F;
@@ -418,30 +420,30 @@ public abstract class EntityChestBoat extends Entity implements IInventory{
 
             d4 = Math.sqrt(this.motionX * this.motionX + this.motionZ * this.motionZ);
 
-            if (d4 > 0.35D)
+            if (d4 > maxSpeed)
             {
-                d5 = 0.35D / d4;
+                d5 = maxSpeed / d4;
                 this.motionX *= d5;
                 this.motionZ *= d5;
-                d4 = 0.35D;
+                d4 = maxSpeed;
             }
 
-            if (d4 > d3 && this.speedMultiplier < 0.35D)
+            if (d4 > d3 && this.speedMultiplier < maxSpeed)
             {
-                this.speedMultiplier += (0.35D - this.speedMultiplier) / 35.0D;
+                this.speedMultiplier += (maxSpeed - this.speedMultiplier) / (maxSpeed*100);
 
-                if (this.speedMultiplier > 0.35D)
+                if (this.speedMultiplier > maxSpeed)
                 {
-                    this.speedMultiplier = 0.35D;
+                    this.speedMultiplier = maxSpeed;
                 }
             }
             else
             {
-                this.speedMultiplier -= (this.speedMultiplier - 0.07D) / 35.0D;
+                this.speedMultiplier -= (this.speedMultiplier - minSpeed) / (maxSpeed*100);
 
-                if (this.speedMultiplier < 0.07D)
+                if (this.speedMultiplier < minSpeed)
                 {
-                    this.speedMultiplier = 0.07D;
+                    this.speedMultiplier = minSpeed;
                 }
             }
             

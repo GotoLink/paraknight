@@ -127,6 +127,8 @@ public class ModPack {
 			{	
 				props.store(new FileOutputStream(getMinecraftBaseDir()+"/paraknight.properties"), null);
 			} catch (IOException e) {FMLLog.getLogger().log(Level.WARNING, "Paraknight Mod Pack couldn't save properties file.");}
+			enableBikes=true;
+			enableLawnMower=true;
 		}
 		return ids;
 	}
