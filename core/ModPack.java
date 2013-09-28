@@ -58,12 +58,15 @@ public class ModPack {
 		if(enableBikes || enableLawnMower){
 			ride = new ItemSpawner(ids[1]).setUnlocalizedName("paraknight:").setTextureName("paraknight:");
 			wrench = new Item(ids[2]).setMaxStackSize(1).setMaxDamage(100).setUnlocalizedName("paraknight:wrench").setCreativeTab(CreativeTabs.tabTransport).setTextureName("paraknight:wrench");	
+			GameRegistry.registerItem(ride, "RideSpawner");
+			GameRegistry.registerItem(wrench, "Wrench");
 			LanguageRegistry.instance().addName(wrench, "Wrench");
 			GameRegistry.addShapelessRecipe(new ItemStack(wrench), new Object[] {
 				new ItemStack(Item.ingotIron) , new ItemStack(Item.coal)});
 		}
 		if(enableBikes){
 			bikePart = new ItemBikePart(ids[0]).setUnlocalizedName("steambikes:").setTextureName("paraknight:");
+			GameRegistry.registerItem(bikePart, "BikePart");
 			LanguageRegistry.instance().addName(new ItemStack(bikePart,1,0), "Bike Wheel");
 			GameRegistry.addRecipe(new ItemStack(bikePart,1,0), new Object[] {
 				" I ", "IGI", " I ", 'I', Item.ingotIron, 'G', Item.ingotGold });
