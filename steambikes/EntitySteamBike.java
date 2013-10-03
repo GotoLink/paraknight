@@ -42,6 +42,7 @@ public abstract class EntitySteamBike extends EntityChestBoat{
 	@SideOnly(Side.CLIENT)
 	public abstract String getEntityTexture();
 	public abstract double getFrictionFactor();
+	@Override
 	public abstract int getItemDamage();
     
     @Override
@@ -49,6 +50,7 @@ public abstract class EntitySteamBike extends EntityChestBoat{
 		return this.height+0.5F;
 	}
 
+	@Override
 	public void updateSpeedModel() {
 		speed  = Math.sqrt(motionX * motionX + motionZ * motionZ)*25;
 		if(speed<0.01 && speed>-0.01)
@@ -67,6 +69,7 @@ public abstract class EntitySteamBike extends EntityChestBoat{
             attackEntityFrom(DamageSource.fall, damage/2);
     }
 	
+	@Override
 	public void handleSoundEffects() {
 		if(riddenByEntity!=null && this.getFuelTime()>0){
 			worldObj.playSoundAtEntity(this, SoundHandler.FOLDER+"purr", 0.1F + (float)(speed/14), (float)(speed/6));

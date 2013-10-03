@@ -33,7 +33,8 @@ public class EntityLawnMower extends EntityChestBoat
 		this.prevPosZ = f;
 	}
 
-    public void updateSpeedModel()
+    @Override
+	public void updateSpeedModel()
     {
         this.speed = Math.sqrt(this.motionX * this.motionX + this.motionZ * this.motionZ) * 25.0D;
 
@@ -46,7 +47,8 @@ public class EntityLawnMower extends EntityChestBoat
             this.bladesAngle = this.bladesAngle < 0.0F ? this.bladesAngle + 360.0F : this.bladesAngle;
     }
 
-    protected void handleBlockCollisions()
+    @Override
+	protected void handleBlockCollisions()
     {
         super.handleBlockCollisions();
 
@@ -70,7 +72,8 @@ public class EntityLawnMower extends EntityChestBoat
         }
     }
 
-    public void handleSoundEffects()
+    @Override
+	public void handleSoundEffects()
     {
         if (this.riddenByEntity != null && this.getFuelTime() > 0)
         {
@@ -78,7 +81,8 @@ public class EntityLawnMower extends EntityChestBoat
         }
     }
 
-    public void handleParticleEffects()
+    @Override
+	public void handleParticleEffects()
     {
         double var1;
         double var3;

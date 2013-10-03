@@ -140,12 +140,14 @@ public class ItemSpawner extends Item{
 		}
 	}
 	
+	@Override
 	@SideOnly(Side.CLIENT)
 	public Icon getIconFromDamage(int par1)
 	{
 	    int j = MathHelper.clamp_int(par1, 0, name.length);
 	    return this.icon[j];
 	}
+	@Override
 	@SideOnly(Side.CLIENT)
 	public void registerIcons(IconRegister par1IconRegister)
 	{
@@ -153,6 +155,7 @@ public class ItemSpawner extends Item{
 		for(int i=0;i<name.length;i++)
 			this.icon[i] = par1IconRegister.registerIcon("paraknight:"+this.name[i]);
 	}
+	@Override
 	@SideOnly(Side.CLIENT)
 	public void getSubItems(int par1, CreativeTabs par2CreativeTabs, List par3List)
 	{

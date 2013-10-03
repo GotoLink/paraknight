@@ -116,7 +116,6 @@ public class ModelSteamBike extends ModelBase {
       }
 
 	public void render(EntitySteamBike bike) {
-		float turnSpeed = 0.1F;
 		frontWheel.rotateAngleY = bike.turnAngle;
 		frontAxis.rotateAngleY = bike.turnAngle;
 		headLamps.rotateAngleY = bike.turnAngle;
