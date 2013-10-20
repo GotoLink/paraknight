@@ -1,9 +1,8 @@
-package assets.paraknight.steambikes;
+package steambikes;
 
 import net.minecraft.world.World;
 
-public class EntityMaroonMarauder extends EntitySteamBike{
-
+public class EntityMaroonMarauder extends EntitySteamBike {
 	public EntityMaroonMarauder(World world) {
 		super(world);
 	}
@@ -11,14 +10,10 @@ public class EntityMaroonMarauder extends EntitySteamBike{
 	public EntityMaroonMarauder(World par2World, double d, double e, double f) {
 		super(par2World, d, e, f);
 	}
-	@Override
-	public int getItemDamage(){
-		return 0;
-	}
-	
+
 	@Override
 	public String getEntityTexture() {
-        return "textures/models/maroonmarauderskin.png";
+		return "textures/models/maroonmarauderskin.png";
 	}
 
 	@Override
@@ -31,4 +26,8 @@ public class EntityMaroonMarauder extends EntitySteamBike{
 		return 800;
 	}
 
+	@Override
+	public int getItemDamage() {
+		return 0;
+	}
 }

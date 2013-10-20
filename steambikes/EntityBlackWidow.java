@@ -1,9 +1,8 @@
-package assets.paraknight.steambikes;
+package steambikes;
 
 import net.minecraft.world.World;
 
-public class EntityBlackWidow extends EntitySteamBike{
-
+public class EntityBlackWidow extends EntitySteamBike {
 	public EntityBlackWidow(World world) {
 		super(world);
 	}
@@ -14,7 +13,7 @@ public class EntityBlackWidow extends EntitySteamBike{
 
 	@Override
 	public String getEntityTexture() {
-        return "textures/models/blackwidowskin.png";
+		return "textures/models/blackwidowskin.png";
 	}
 
 	@Override
@@ -31,5 +30,4 @@ public class EntityBlackWidow extends EntitySteamBike{
 	public int getItemDamage() {
 		return 1;
 	}
-
 }
