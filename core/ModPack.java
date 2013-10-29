@@ -29,7 +29,6 @@ import cpw.mods.fml.common.network.NetworkMod;
 import cpw.mods.fml.common.network.NetworkRegistry;
 import cpw.mods.fml.common.registry.EntityRegistry;
 import cpw.mods.fml.common.registry.GameRegistry;
-import cpw.mods.fml.common.registry.LanguageRegistry;
 import cpw.mods.fml.relauncher.Side;
 
 @Mod(modid = "paraknight", name = "Paraknight Mod Pack", version = "1.1")
@@ -50,22 +49,16 @@ public class ModPack {
 			wrench = new Item(ids[2]).setMaxStackSize(1).setMaxDamage(100).setUnlocalizedName("paraknight:wrench").setCreativeTab(CreativeTabs.tabTransport).setTextureName("paraknight:wrench");
 			GameRegistry.registerItem(ride, "RideSpawner");
 			GameRegistry.registerItem(wrench, "Wrench");
-			LanguageRegistry.instance().addName(wrench, "Wrench");
 			GameRegistry.addShapelessRecipe(new ItemStack(wrench), new Object[] { new ItemStack(Item.ingotIron), new ItemStack(Item.coal) });
 		}
 		if (enableBikes) {
 			bikePart = new ItemBikePart(ids[0]).setUnlocalizedName("steambikes:").setTextureName("paraknight:");
 			GameRegistry.registerItem(bikePart, "BikePart");
-			LanguageRegistry.instance().addName(new ItemStack(bikePart, 1, 0), "Bike Wheel");
 			GameRegistry.addRecipe(new ItemStack(bikePart, 1, 0), new Object[] { " I ", "IGI", " I ", 'I', Item.ingotIron, 'G', Item.ingotGold });
-			LanguageRegistry.instance().addName(new ItemStack(bikePart, 1, 1), "Bike Chassis");
 			GameRegistry.addRecipe(new ItemStack(bikePart, 1, 1), new Object[] { "CSR", "III", "WGW", 'C', Block.chest, 'S', Item.saddle, 'R', Item.redstone, 'I', Item.ingotIron, 'W',
 					new ItemStack(bikePart, 1, 0), 'G', Item.ingotGold });
-			LanguageRegistry.instance().addName(new ItemStack(bikePart, 1, 2), "Steam Engine");
 			GameRegistry.addRecipe(new ItemStack(bikePart, 1, 2), new Object[] { "W", "F", "R", 'W', Item.bucketWater, 'F', Block.furnaceIdle, 'R', Item.redstone });
 			EntityRegistry.registerModEntity(EntityMaroonMarauder.class, "MaroonMarauder", 1, this, 40, 1, true);
-			LanguageRegistry.instance().addName(new ItemStack(ride, 1, 0), "Maroon Marauder");
-			LanguageRegistry.instance().addName(new ItemStack(ride, 1, 1), "Black Widow");
 			for (int i = 0; i < 2; i++) {
 				GameRegistry.addRecipe(new ItemStack(ride, 1, i), new Object[] { "W", "C", "E", 'W', new ItemStack(Block.cloth, 1, 14 + i), 'C', new ItemStack(bikePart, 1, 1), 'E',
 						new ItemStack(bikePart, 1, 2) });
@@ -73,10 +66,8 @@ public class ModPack {
 			EntityRegistry.registerModEntity(EntityBlackWidow.class, "BlackWidow", 2, this, 40, 1, true);
 		}
 		if (enableLawnMower) {
-			LanguageRegistry.instance().addName(new ItemStack(ride, 1, 2), "Lawn Mower");
 			GameRegistry.addRecipe(new ItemStack(ride, 1, 2), new Object[] { " B ", "III", 'B', Item.boat, 'I', Item.ingotIron });
 			EntityRegistry.registerModEntity(EntityLawnMower.class, "LawnMower", 3, this, 40, 1, true);
-			LanguageRegistry.instance().addName(new ItemStack(ride, 1, 3), "Lawn Mower Key");
 			GameRegistry.addShapelessRecipe(new ItemStack(ride, 1, 3), new Object[] { Item.ingotIron, Item.seeds });
 		}
 		proxy.registerHandlers();
