@@ -8,6 +8,7 @@ import net.minecraft.world.World;
 
 import org.lwjgl.input.Keyboard;
 
+import core.CommonProxy;
 import core.EntityChestBoat;
 import core.ModPack;
 import core.SoundHandler;
@@ -67,7 +68,7 @@ public abstract class EntitySteamBike extends EntityChestBoat {
 	@Override
 	public boolean interactFirst(EntityPlayer player) {
 		if (Keyboard.isKeyDown(Keyboard.KEY_LCONTROL)) {
-			player.openGui(ModPack.instance, ModPack.proxy.GUI, this.worldObj, (int) this.posX, (int) this.posY, (int) this.posZ);
+			player.openGui(ModPack.instance, CommonProxy.GUI, this.worldObj, (int) this.posX, (int) this.posY, (int) this.posZ);
 			return true;
 		}
 		ItemStack heldItem = player.getCurrentEquippedItem();

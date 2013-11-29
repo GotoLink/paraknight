@@ -112,7 +112,7 @@ public abstract class EntityChestBoat extends Entity implements IInventory {
 				if (this.riddenByEntity != null) {
 					this.riddenByEntity.mountEntity(this);
 				}
-				this.entityDropItem(new ItemStack(ModPack.instance.ride.itemID, 1, getItemDamage()), 0.0f);
+				this.entityDropItem(new ItemStack(ModPack.ride.itemID, 1, getItemDamage()), 0.0f);
 				this.setDead();
 			}
 			if (this.getDamageTaken() > 80) {
@@ -375,7 +375,7 @@ public abstract class EntityChestBoat extends Entity implements IInventory {
 			this.rotationYaw = (float) (this.rotationYaw + d12);
 			this.setRotation(this.rotationYaw, this.rotationPitch);
 			if (!this.worldObj.isRemote) {
-				List list = this.worldObj.getEntitiesWithinAABBExcludingEntity(this, this.boundingBox.expand(0.20000000298023224D, 0.0D, 0.20000000298023224D));
+				List<?> list = this.worldObj.getEntitiesWithinAABBExcludingEntity(this, this.boundingBox.expand(0.20000000298023224D, 0.0D, 0.20000000298023224D));
 				int l;
 				if (list != null && !list.isEmpty()) {
 					for (l = 0; l < list.size(); ++l) {
@@ -554,8 +554,8 @@ public abstract class EntityChestBoat extends Entity implements IInventory {
 	}
 
 	private void handleEntityCollisions() {
-		List var1 = this.worldObj.getEntitiesWithinAABBExcludingEntity(this, this.boundingBox.expand(0.2D, 0.0D, 0.2D));
-		Iterator var2 = var1.iterator();
+		List<?> var1 = this.worldObj.getEntitiesWithinAABBExcludingEntity(this, this.boundingBox.expand(0.2D, 0.0D, 0.2D));
+		Iterator<?> var2 = var1.iterator();
 		while (var2.hasNext()) {
 			Entity var3 = (Entity) var2.next();
 			if (var3 instanceof EntityItem && ((EntityItem) var3).getEntityItem().itemID == Item.seeds.itemID

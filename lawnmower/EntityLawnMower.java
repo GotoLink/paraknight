@@ -9,6 +9,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeHooks;
+import core.CommonProxy;
 import core.EntityChestBoat;
 import core.ModPack;
 import core.SoundHandler;
@@ -120,7 +121,7 @@ public class EntityLawnMower extends EntityChestBoat {
 				}
 			}
 		} else {
-			var1.openGui(ModPack.instance, ModPack.proxy.GUI, this.worldObj, (int) this.posX, (int) this.posY, (int) this.posZ);
+			var1.openGui(ModPack.instance, CommonProxy.GUI, this.worldObj, (int) this.posX, (int) this.posY, (int) this.posZ);
 			return false;
 		}
 		return false;
