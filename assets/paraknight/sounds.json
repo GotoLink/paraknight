@@ -1,0 +1,30 @@
+{
+"clank": {
+    "category": "player",
+    "sounds": [
+      "clank"
+    ]
+  },
+"ignition": {
+    "category": "player",
+    "sounds": [
+      "ignition"
+    ]
+  },
+"lawnmower": {
+    "category": "player",
+    "sounds": ["lawnmower"]
+  },
+"purr": {
+    "category": "player",
+    "sounds": [
+      "purr"
+    ]
+  },
+"steam": {
+    "category": "player",
+    "sounds": [
+      "steam"
+    ]
+  }
+}

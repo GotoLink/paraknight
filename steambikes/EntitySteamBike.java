@@ -1,7 +1,7 @@
 package steambikes;
 
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.Item;
+import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.DamageSource;
 import net.minecraft.world.World;
@@ -11,7 +11,6 @@ import org.lwjgl.input.Keyboard;
 import core.CommonProxy;
 import core.EntityChestBoat;
 import core.ModPack;
-import core.SoundHandler;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
@@ -44,7 +43,7 @@ public abstract class EntitySteamBike extends EntityChestBoat {
 	public abstract double getFrictionFactor();
 
 	@Override
-	public String getInvName() {
+	public String func_145825_b() {
 		return "Steam Bike";
 	}
 
@@ -59,9 +58,9 @@ public abstract class EntitySteamBike extends EntityChestBoat {
 	@Override
 	public void handleSoundEffects() {
 		if (riddenByEntity != null && this.getFuelTime() > 0) {
-			worldObj.playSoundAtEntity(this, SoundHandler.FOLDER + "purr", 0.1F + (float) (speed / 14), (float) (speed / 6));
+			worldObj.playSoundAtEntity(this, ModPack.FOLDER + "purr", 0.1F + (float) (speed / 14), (float) (speed / 6));
 			if (this.getFuelTime() < 10 && rand.nextInt(75) == 0)
-				worldObj.playSoundAtEntity(this, SoundHandler.FOLDER + "steam", 0.1F, rand.nextFloat());
+				worldObj.playSoundAtEntity(this, ModPack.FOLDER + "steam", 0.1F, rand.nextFloat());
 		}
 	}
 
@@ -73,7 +72,7 @@ public abstract class EntitySteamBike extends EntityChestBoat {
 		}
 		ItemStack heldItem = player.getCurrentEquippedItem();
 		if (heldItem != null) {
-			if (heldItem.itemID == Item.coal.itemID) {
+			if (heldItem.getItem() == Items.coal) {
 				if (addFuel()) {
 					if (--heldItem.stackSize <= 0)
 						player.destroyCurrentEquippedItem();
@@ -81,7 +80,7 @@ public abstract class EntitySteamBike extends EntityChestBoat {
 				}
 				return false;
 			}
-			if (heldItem.itemID == ModPack.wrench.itemID) {
+			if (heldItem.getItem() == ModPack.wrench) {
 				if (this.getDamageTaken() >= 10) {
 					this.setDamageTaken(this.getDamageTaken() - 10);
 					heldItem.damageItem(1, player);
@@ -95,7 +94,7 @@ public abstract class EntitySteamBike extends EntityChestBoat {
 		}
 		if (!(riddenByEntity != null && riddenByEntity instanceof EntityPlayer && this.riddenByEntity != player)) {
 			if (riddenByEntity == null)
-				worldObj.playSoundAtEntity(this, SoundHandler.FOLDER + "ignition", 1F, 1F);
+				worldObj.playSoundAtEntity(this, ModPack.FOLDER + "ignition", 1F, 1F);
 			if (!this.worldObj.isRemote)
 				player.mountEntity(this);
 			return true;

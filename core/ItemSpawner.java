@@ -3,19 +3,14 @@ package core;
 import java.util.List;
 
 import lawnmower.EntityLawnMower;
-import net.minecraft.block.Block;
-import net.minecraft.client.renderer.texture.IconRegister;
+import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.AxisAlignedBB;
-import net.minecraft.util.EnumMovingObjectType;
-import net.minecraft.util.Icon;
-import net.minecraft.util.MathHelper;
-import net.minecraft.util.MovingObjectPosition;
-import net.minecraft.util.Vec3;
+import net.minecraft.util.*;
 import net.minecraft.world.World;
 import steambikes.EntityBlackWidow;
 import steambikes.EntityMaroonMarauder;
@@ -24,10 +19,10 @@ import cpw.mods.fml.relauncher.SideOnly;
 
 public class ItemSpawner extends Item {
 	public static String[] name = new String[] { "maroonmarauder", "blackwidow", "lawnmower", "lawnmowerkey" };
-	protected Icon[] icon;
+	protected IIcon[] icon;
 
-	public ItemSpawner(int id) {
-		super(id);
+	public ItemSpawner() {
+		super();
 		this.setMaxStackSize(1);
 		this.setHasSubtypes(true);
 		this.setCreativeTab(CreativeTabs.tabTransport);
@@ -35,14 +30,14 @@ public class ItemSpawner extends Item {
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	public Icon getIconFromDamage(int par1) {
+	public IIcon getIconFromDamage(int par1) {
 		int j = MathHelper.clamp_int(par1, 0, name.length);
 		return this.icon[j];
 	}
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	public void getSubItems(int par1, CreativeTabs par2CreativeTabs, List par3List) {
+	public void func_150895_a(Item par1, CreativeTabs par2CreativeTabs, List par3List) {
 		for (int j = 0; j < name.length; ++j) {
 			par3List.add(new ItemStack(par1, 1, j));
 		}
@@ -94,11 +89,11 @@ public class ItemSpawner extends Item {
 			if (flag) {
 				return par1ItemStack;
 			} else {
-				if (movingobjectposition.typeOfHit == EnumMovingObjectType.TILE) {
+				if (movingobjectposition.typeOfHit == MovingObjectPosition.MovingObjectType.BLOCK) {
 					i = movingobjectposition.blockX;
 					int j = movingobjectposition.blockY;
 					int k = movingobjectposition.blockZ;
-					if (par2World.getBlockId(i, j, k) == Block.snow.blockID) {
+					if (par2World.func_147439_a(i, j, k) == Blocks.snow) {
 						--j;
 					}
 					Entity entity = makeEntity(par1ItemStack, par2World, i + 0.5F, j + 1F, k + 0.5F);
@@ -123,8 +118,8 @@ public class ItemSpawner extends Item {
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	public void registerIcons(IconRegister par1IconRegister) {
-		this.icon = new Icon[name.length];
+	public void registerIcons(IIconRegister par1IconRegister) {
+		this.icon = new IIcon[name.length];
 		for (int i = 0; i < name.length; i++)
 			this.icon[i] = par1IconRegister.registerIcon("paraknight:" + this.name[i]);
 	}

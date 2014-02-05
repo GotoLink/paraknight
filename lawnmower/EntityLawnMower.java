@@ -4,7 +4,7 @@ import net.minecraft.block.Block;
 import net.minecraft.block.BlockTallGrass;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.Item;
+import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
@@ -12,7 +12,6 @@ import net.minecraftforge.common.ForgeHooks;
 import core.CommonProxy;
 import core.EntityChestBoat;
 import core.ModPack;
-import core.SoundHandler;
 
 public class EntityLawnMower extends EntityChestBoat {
 	public float bladesAngle = ((float) Math.PI / 4F);
@@ -39,7 +38,7 @@ public class EntityLawnMower extends EntityChestBoat {
 	}
 
 	@Override
-	public String getInvName() {
+	public String func_145825_b() {
 		return "Lawn Mower";
 	}
 
@@ -52,7 +51,7 @@ public class EntityLawnMower extends EntityChestBoat {
 	public void handleParticleEffects() {
 		double var1;
 		double var3;
-		if (this.speed > 3.6249999999999996D) {
+		if (this.speed > 3.625D) {
 			var1 = Math.cos(this.rotationYaw * Math.PI / 180.0D);
 			var3 = Math.sin(this.rotationYaw * Math.PI / 180.0D);
 			for (int var5 = 0; var5 < 1.0D + this.speed * 60.0D; ++var5) {
@@ -81,15 +80,20 @@ public class EntityLawnMower extends EntityChestBoat {
 	@Override
 	public void handleSoundEffects() {
 		if (this.riddenByEntity != null && this.getFuelTime() > 0) {
-			this.worldObj.playSoundAtEntity(this, SoundHandler.FOLDER + "lawnmower", 0.1F + (float) (this.speed / 7.0D), (float) (this.speed / 6.0D));
+			this.worldObj.playSoundAtEntity(this, ModPack.FOLDER + "lawnmower", 0.1F + (float) (this.speed / 7.0D), (float) (this.speed / 6.0D));
 		}
 	}
 
-	@Override
+    @Override
+    public double getMaxCollisionSpeed() {
+        return 2D;
+    }
+
+    @Override
 	public boolean interactFirst(EntityPlayer var1) {
 		ItemStack var2 = var1.getCurrentEquippedItem();
 		if (var2 != null) {
-			if (var2.itemID == Item.coal.itemID) {
+			if (var2.getItem() == Items.coal) {
 				if (this.addFuel()) {
 					--var2.stackSize;
 					if (var2.stackSize <= 0) {
@@ -99,7 +103,7 @@ public class EntityLawnMower extends EntityChestBoat {
 				}
 				return false;
 			}
-			if (var2.itemID == ModPack.wrench.itemID) {
+			if (var2.getItem() == ModPack.wrench) {
 				if (this.getDamageTaken() >= 10) {
 					this.setDamageTaken(this.getDamageTaken() - 10);
 					var2.damageItem(1, var1);
@@ -110,11 +114,11 @@ public class EntityLawnMower extends EntityChestBoat {
 				}
 				return false;
 			}
-			if (var2.itemID == ModPack.ride.itemID && var2.getItemDamage() == 3) {
+			if (var2.getItem() == ModPack.ride && var2.getItemDamage() == 3) {
 				if (this.riddenByEntity != null && this.riddenByEntity != var1 && this.riddenByEntity instanceof EntityPlayer) {
 					return true;
 				} else {
-					this.worldObj.playSoundAtEntity(this, SoundHandler.FOLDER + "ignition", 1.0F, 1.0F);
+					this.worldObj.playSoundAtEntity(this, ModPack.FOLDER + "ignition", 1.0F, 1.0F);
 					if (!this.worldObj.isRemote)
 						var1.mountEntity(this);
 					return true;
@@ -154,12 +158,12 @@ public class EntityLawnMower extends EntityChestBoat {
 			int var2 = MathHelper.floor_double(this.posX + (var1 % 2 - 0.5D) * 0.8D);
 			int var3 = MathHelper.floor_double(this.posY);
 			int var4 = MathHelper.floor_double(this.posZ + (var1 / 2 - 0.5D) * 0.8D);
-			int var5 = this.worldObj.getBlockId(var2, var3, var4);
-			if (Block.blocksList[var5] instanceof BlockTallGrass /* BlockFlower ? */&& this.riddenByEntity != null) {
-				this.worldObj.setBlock(var2, var3, var4, 0);
+			Block var5 = this.worldObj.func_147439_a(var2, var3, var4);
+			if (var5 instanceof BlockTallGrass /* BlockFlower ? */&& this.riddenByEntity != null) {
+				this.worldObj.func_147468_f(var2, var3, var4);
 				if (this.rand.nextInt(8) == 0 && !this.addItemStackToCargo(ForgeHooks.getGrassSeed(worldObj))) {
 					if (!this.worldObj.isRemote)
-						this.worldObj.spawnEntityInWorld(new EntityItem(this.worldObj, var2 + 0.5D, var3 + 0.5D, var4 + 0.5D, new ItemStack(Block.blocksList[var5], 1, this.worldObj.getBlockMetadata(
+						this.worldObj.spawnEntityInWorld(new EntityItem(this.worldObj, var2 + 0.5D, var3 + 0.5D, var4 + 0.5D, new ItemStack(var5, 1, this.worldObj.getBlockMetadata(
 								var2, var3, var4))));
 				}
 			}

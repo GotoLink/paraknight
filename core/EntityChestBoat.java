@@ -8,9 +8,10 @@ import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.item.EntityBoat;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Blocks;
+import net.minecraft.init.Items;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -31,7 +32,6 @@ public abstract class EntityChestBoat extends Entity implements IInventory {
 	private int boatPosRotationIncrements;
 	private double boatX, boatY, boatZ;
 	private double boatYaw;
-	private boolean isEmpty;
 	@SideOnly(Side.CLIENT)
 	private double velocityX;
 	@SideOnly(Side.CLIENT)
@@ -41,7 +41,6 @@ public abstract class EntityChestBoat extends Entity implements IInventory {
 
 	public EntityChestBoat(World par1World) {
 		super(par1World);
-		this.isEmpty = true;
 		cargo = new ItemStack[5];
 		this.speedMultiplier = 0.14D;
 		this.maxSpeed = 0.35D;
@@ -64,7 +63,7 @@ public abstract class EntityChestBoat extends Entity implements IInventory {
 
 	public boolean addFuel() {
 		if (cargo[0] == null) {
-			cargo[0] = new ItemStack(Item.coal);
+			cargo[0] = new ItemStack(Items.coal);
 			return true;
 		} else if (cargo[0].stackSize >= getInventoryStackLimit())
 			return false;
@@ -99,7 +98,7 @@ public abstract class EntityChestBoat extends Entity implements IInventory {
 		if (this.isEntityInvulnerable()) {
 			return false;
 		} else if (!this.worldObj.isRemote && !this.isDead) {
-			worldObj.playSoundAtEntity(this, SoundHandler.FOLDER + "clank", 0.2F, ((rand.nextFloat() - rand.nextFloat()) * 0.7F + 1.0F) * 2.0F);
+			worldObj.playSoundAtEntity(this, ModPack.FOLDER + "clank", 0.2F, ((rand.nextFloat() - rand.nextFloat()) * 0.7F + 1.0F) * 2.0F);
 			this.setForwardDirection(-this.getForwardDirection());
 			this.setTimeSinceHit(10);
 			if (source.isFireDamage())
@@ -112,7 +111,7 @@ public abstract class EntityChestBoat extends Entity implements IInventory {
 				if (this.riddenByEntity != null) {
 					this.riddenByEntity.mountEntity(this);
 				}
-				this.entityDropItem(new ItemStack(ModPack.ride.itemID, 1, getItemDamage()), 0.0f);
+				this.entityDropItem(new ItemStack(ModPack.ride, 1, getItemDamage()), 0.0f);
 				this.setDead();
 			}
 			if (this.getDamageTaken() > 80) {
@@ -170,11 +169,6 @@ public abstract class EntityChestBoat extends Entity implements IInventory {
 			return null;
 	}
 
-	@SideOnly(Side.CLIENT)
-	public void func_70270_d(boolean par1) {
-		this.isEmpty = par1;
-	}
-
 	@Override
 	public AxisAlignedBB getBoundingBox() {
 		return this.boundingBox;
@@ -199,9 +193,9 @@ public abstract class EntityChestBoat extends Entity implements IInventory {
 		return this.dataWatcher.getWatchableObjectInt(25);
 	}
 
-	public int getInventorySlotContainItem(int i) {
+	public int getInventorySlotContainItem(Item i) {
 		for (int j = 0; j < cargo.length; j++)
-			if (cargo[j] != null && cargo[j].itemID == i)
+			if (cargo[j] != null && cargo[j].getItem() == i)
 				return j;
 		return -1;
 	}
@@ -244,18 +238,18 @@ public abstract class EntityChestBoat extends Entity implements IInventory {
 	public abstract void handleSoundEffects();
 
 	@Override
-	public boolean isInvNameLocalized() {
+	public boolean func_145818_k_() {
 		return false;
 	}
 
 	@Override
 	public boolean isItemValidForSlot(int i, ItemStack item) {
-		return (i == 0 && item.itemID == Item.coal.itemID) || i > 0;
+		return (i == 0 && item.getItem() == Items.coal) || i > 0;
 	}
 
 	@Override
 	public boolean isUseableByPlayer(EntityPlayer player) {
-		return this.isDead ? false : player.getDistanceSqToEntity(this) <= 64.0D;
+		return !this.isDead && player.getDistanceSqToEntity(this) <= 64.0D;
 	}
 
 	@Override
@@ -273,9 +267,9 @@ public abstract class EntityChestBoat extends Entity implements IInventory {
 			this.setFuelTime(this.getFuelTime() - 1);
 		}
 		if (this.getFuelTime() == 0) {
-			if (this.riddenByEntity != null && this.riddenByEntity instanceof EntityPlayer && ((EntityPlayer) this.riddenByEntity).inventory.hasItem(263)) {
+			if (this.riddenByEntity != null && this.riddenByEntity instanceof EntityPlayer && ((EntityPlayer) this.riddenByEntity).inventory.func_146028_b(Items.coal)) {
 				this.setFuelTime(getFuelDuration());
-				((EntityPlayer) this.riddenByEntity).inventory.consumeInventoryItem(263);
+				((EntityPlayer) this.riddenByEntity).inventory.func_146026_a(Items.coal);
 			}
 		}
 		this.prevPosX = this.posX;
@@ -285,13 +279,9 @@ public abstract class EntityChestBoat extends Entity implements IInventory {
 		double d3 = Math.sqrt(this.motionX * this.motionX + this.motionZ * this.motionZ);
 		double d4;
 		double d5;
-		if (d3 > 0.2625D) {
-			d4 = Math.cos(this.rotationYaw * Math.PI / 180.0D);
-			d5 = Math.sin(this.rotationYaw * Math.PI / 180.0D);
-		}
 		double d10;
 		double d11;
-		if (this.worldObj.isRemote && this.isEmpty) {
+		if (this.worldObj.isRemote) {
 			if (this.boatPosRotationIncrements > 0) {
 				d4 = this.posX + (this.boatX - this.posX) / this.boatPosRotationIncrements;
 				d5 = this.posY + (this.boatY - this.posY) / this.boatPosRotationIncrements;
@@ -318,13 +308,13 @@ public abstract class EntityChestBoat extends Entity implements IInventory {
 			}
 		} else {
 			if (this.riddenByEntity != null && this.riddenByEntity instanceof EntityLivingBase) {
-				d4 = ((EntityLivingBase) this.riddenByEntity).moveForward;
-				d0 = ((EntityLivingBase) this.riddenByEntity).moveStrafing;
-				d5 = -Math.sin(this.riddenByEntity.rotationYaw * (float) Math.PI / 180.0F);
-				double d21 = Math.cos(this.riddenByEntity.rotationYaw * (float) Math.PI / 180.0F);
-				this.motionX += (d0 * d21 + d5 * d4) * this.speedMultiplier;
-				this.motionZ += (d4 * d21 - d0 * d5) * this.speedMultiplier;
-			}
+                float f = this.riddenByEntity.rotationYaw - ((EntityLivingBase)riddenByEntity).moveStrafing * 90.0F;
+                this.motionX += -Math.sin((double)(f * (float)Math.PI / 180.0F)) * this.speedMultiplier * (double)((EntityLivingBase)riddenByEntity).moveForward * 0.05D;
+                this.motionZ += Math.cos((double)(f * (float)Math.PI / 180.0F)) * this.speedMultiplier * (double)((EntityLivingBase)riddenByEntity).moveForward * 0.05D;
+                this.stepHeight = 1.0F;
+			}else{
+                this.stepHeight = 0.5F;
+            }
 			d4 = Math.sqrt(this.motionX * this.motionX + this.motionZ * this.motionZ);
 			if (d4 > maxSpeed) {
 				d5 = maxSpeed / d4;
@@ -349,7 +339,7 @@ public abstract class EntityChestBoat extends Entity implements IInventory {
 				this.motionZ *= 0.5D;
 			}
 			this.moveEntity(this.motionX, this.motionY, this.motionZ);
-			if (this.isCollidedHorizontally && d3 > 0.2D) {
+			if (this.isCollidedHorizontally && d3 > getMaxCollisionSpeed()) {
 				if (!this.worldObj.isRemote && !this.isDead) {
 					this.setDead();
 				}
@@ -380,7 +370,7 @@ public abstract class EntityChestBoat extends Entity implements IInventory {
 				if (list != null && !list.isEmpty()) {
 					for (l = 0; l < list.size(); ++l) {
 						Entity entity = (Entity) list.get(l);
-						if (entity != this.riddenByEntity && entity.canBePushed() && entity instanceof EntityBoat) {
+						if (entity != this.riddenByEntity && entity.canBePushed()) {
 							entity.applyEntityCollision(this);
 						}
 					}
@@ -390,9 +380,9 @@ public abstract class EntityChestBoat extends Entity implements IInventory {
 					int j1 = MathHelper.floor_double(this.posZ + (l / 2 - 0.5D) * 0.8D);
 					for (int k1 = 0; k1 < 2; ++k1) {
 						int l1 = MathHelper.floor_double(this.posY) + k1;
-						int i2 = this.worldObj.getBlockId(i1, l1, j1);
-						if (i2 == Block.snow.blockID) {
-							this.worldObj.setBlockToAir(i1, l1, j1);
+						Block i2 = this.worldObj.func_147439_a(i1, l1, j1);
+						if (i2 == Blocks.snow) {
+							this.worldObj.func_147468_f(i1, l1, j1);
 						}
 					}
 				}
@@ -409,14 +399,16 @@ public abstract class EntityChestBoat extends Entity implements IInventory {
 		handleParticleEffects();
 	}
 
-	@Override
+    public abstract double getMaxCollisionSpeed();
+
+    @Override
 	public void openChest() {
 	}
 
 	public void readFromNBT(NBTTagList nbttaglist) {
 		cargo = new ItemStack[5];
 		for (int i = 0; i < nbttaglist.tagCount(); i++) {
-			NBTTagCompound nbttagcompound = (NBTTagCompound) nbttaglist.tagAt(i);
+			NBTTagCompound nbttagcompound = nbttaglist.func_150305_b(i);
 			int j = nbttagcompound.getByte("Slot") & 0xff;
 			ItemStack itemstack = ItemStack.loadItemStackFromNBT(nbttagcompound);
 			if (itemstack.getItem() == null)
@@ -448,18 +440,7 @@ public abstract class EntityChestBoat extends Entity implements IInventory {
 	@Override
 	@SideOnly(Side.CLIENT)
 	public void setPositionAndRotation2(double par1, double par3, double par5, float par7, float par8, int par9) {
-		if (this.isEmpty) {
-			this.boatPosRotationIncrements = par9 + 5;
-		} else {
-			double d3 = par1 - this.posX;
-			double d4 = par3 - this.posY;
-			double d5 = par5 - this.posZ;
-			double d6 = d3 * d3 + d4 * d4 + d5 * d5;
-			if (d6 <= 1.0D) {
-				return;
-			}
-			this.boatPosRotationIncrements = 3;
-		}
+        this.boatPosRotationIncrements = par9 + 5;
 		this.boatX = par1;
 		this.boatY = par3;
 		this.boatZ = par5;
@@ -538,7 +519,7 @@ public abstract class EntityChestBoat extends Entity implements IInventory {
 
 	@Override
 	protected void readEntityFromNBT(NBTTagCompound nbttagcompound) {
-		readFromNBT(nbttagcompound.getTagList("Cargo"));
+		readFromNBT((NBTTagList)nbttagcompound.getTag("Cargo"));
 	}
 
 	@Override
@@ -558,8 +539,8 @@ public abstract class EntityChestBoat extends Entity implements IInventory {
 		Iterator<?> var2 = var1.iterator();
 		while (var2.hasNext()) {
 			Entity var3 = (Entity) var2.next();
-			if (var3 instanceof EntityItem && ((EntityItem) var3).getEntityItem().itemID == Item.seeds.itemID
-					&& this.addItemStackToCargo(new ItemStack(Item.seeds, ((EntityItem) var3).getEntityItem().stackSize))) {
+			if (var3 instanceof EntityItem && ((EntityItem) var3).getEntityItem().getItem() == Items.wheat_seeds
+					&& this.addItemStackToCargo(new ItemStack(Items.wheat_seeds, ((EntityItem) var3).getEntityItem().stackSize))) {
 				var3.setDead();
 			}
 			if (this.riddenByEntity != null && var3 != this.riddenByEntity && var3 instanceof EntityLiving && this.speed > 0.0D && var3.attackEntityFrom(DamageSource.generic, 4)) {
@@ -584,14 +565,14 @@ public abstract class EntityChestBoat extends Entity implements IInventory {
 
 	private int storeItemStack(ItemStack itemstack) {
 		for (int i = 1; i < cargo.length; i++)
-			if (cargo[i] != null && cargo[i].itemID == itemstack.itemID && cargo[i].isStackable() && cargo[i].stackSize < cargo[i].getMaxStackSize() && cargo[i].stackSize < getInventoryStackLimit()
+			if (cargo[i] != null && cargo[i].getItem() == itemstack.getItem() && cargo[i].isStackable() && cargo[i].stackSize < cargo[i].getMaxStackSize() && cargo[i].stackSize < getInventoryStackLimit()
 					&& (!cargo[i].getHasSubtypes() || cargo[i].getItemDamage() == itemstack.getItemDamage()))
 				return i;
 		return -1;
 	}
 
 	private int storePartialItemStack(ItemStack itemstack) {
-		int i = itemstack.itemID;
+		Item i = itemstack.getItem();
 		int j = itemstack.stackSize;
 		int k = storeItemStack(itemstack);
 		if (k < 0)

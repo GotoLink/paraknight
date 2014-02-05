@@ -17,6 +17,5 @@ public class ClientProxy extends CommonProxy {
 		RenderingRegistry.registerEntityRenderingHandler(EntityBlackWidow.class, new RenderSteamBike());
 		RenderingRegistry.registerEntityRenderingHandler(EntityLawnMower.class, new RenderLawnMower());
 		MinecraftForge.EVENT_BUS.register(new HUDLawnMower(Minecraft.getMinecraft()));
-		MinecraftForge.EVENT_BUS.register(new SoundHandler());
 	}
 }

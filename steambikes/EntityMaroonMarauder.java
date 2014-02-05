@@ -30,4 +30,9 @@ public class EntityMaroonMarauder extends EntitySteamBike {
 	public int getItemDamage() {
 		return 0;
 	}
+
+    @Override
+    public double getMaxCollisionSpeed() {
+        return 1.5D;
+    }
 }

@@ -2,36 +2,35 @@ package steambikes;
 
 import java.util.List;
 
-import net.minecraft.client.renderer.texture.IconRegister;
+import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.Icon;
+import net.minecraft.util.IIcon;
 import net.minecraft.util.MathHelper;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
 public class ItemBikePart extends Item {
 	public static String[] name = new String[] { "bikewheel", "bikechassis", "steamengine" };
-	public int type;
-	private Icon[] icon;
+	private IIcon[] icon;
 
-	public ItemBikePart(int id) {
-		super(id);
+	public ItemBikePart() {
+		super();
 		this.setHasSubtypes(true);
 		this.setCreativeTab(CreativeTabs.tabTransport);
 	}
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	public Icon getIconFromDamage(int par1) {
+	public IIcon getIconFromDamage(int par1) {
 		int j = MathHelper.clamp_int(par1, 0, name.length);
 		return this.icon[j];
 	}
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	public void getSubItems(int par1, CreativeTabs par2CreativeTabs, List par3List) {
+	public void func_150895_a(Item par1, CreativeTabs par2CreativeTabs, List par3List) {
 		for (int j = 0; j < name.length; ++j) {
 			par3List.add(new ItemStack(par1, 1, j));
 		}
@@ -45,8 +44,8 @@ public class ItemBikePart extends Item {
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	public void registerIcons(IconRegister par1IconRegister) {
-		this.icon = new Icon[name.length];
+	public void registerIcons(IIconRegister par1IconRegister) {
+		this.icon = new IIcon[name.length];
 		for (int i = 0; i < name.length; i++)
 			this.icon[i] = par1IconRegister.registerIcon("paraknight:" + this.name[i]);
 	}

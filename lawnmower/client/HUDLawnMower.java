@@ -1,12 +1,11 @@
 package lawnmower.client;
 
+import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import lawnmower.EntityLawnMower;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
-import net.minecraftforge.event.EventPriority;
-import net.minecraftforge.event.ForgeSubscribe;
 
 import org.lwjgl.opengl.GL11;
 
@@ -25,7 +24,7 @@ public class HUDLawnMower extends Gui {
 		this.game = var1;
 	}
 
-	@ForgeSubscribe(priority = EventPriority.NORMAL)
+	@SubscribeEvent()
 	public void renderSkillHUD(RenderGameOverlayEvent event) {
 		this.windowWidth = event.resolution.getScaledWidth();
 		if (game.thePlayer.ridingEntity != null && game.thePlayer.ridingEntity instanceof EntityLawnMower) {

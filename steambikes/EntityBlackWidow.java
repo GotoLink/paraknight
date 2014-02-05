@@ -30,4 +30,9 @@ public class EntityBlackWidow extends EntitySteamBike {
 	public int getItemDamage() {
 		return 1;
 	}
+
+    @Override
+    public double getMaxCollisionSpeed() {
+        return 1.8D;
+    }
 }

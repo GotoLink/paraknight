@@ -2,10 +2,10 @@ package core;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
+import net.minecraft.init.Items;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Slot;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 
 public class ContainerBase extends Container {
@@ -43,7 +43,7 @@ public class ContainerBase extends Container {
 		if (slot != null && slot.getHasStack()) {
 			ItemStack itemstack1 = slot.getStack();
 			itemstack = itemstack1.copy();
-			if (itemstack1.itemID == Item.coal.itemID && i != 0)
+			if (itemstack1.getItem() == Items.coal && i != 0)
 				this.mergeItemStack(itemstack1, 0, 1, false);//Put coal into fuel slot
 			else if (i < this.inv.getSizeInventory()) //From inventory to player inventory
 			{
