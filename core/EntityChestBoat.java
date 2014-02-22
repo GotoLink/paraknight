@@ -68,7 +68,7 @@ public abstract class EntityChestBoat extends Entity implements IInventory {
 		} else if (cargo[0].stackSize >= getInventoryStackLimit())
 			return false;
 		cargo[0].stackSize++;
-		onInventoryChanged();
+		markDirty();
 		return true;
 	}
 
@@ -79,7 +79,7 @@ public abstract class EntityChestBoat extends Entity implements IInventory {
 				i = itemstack.stackSize;
 				itemstack.stackSize = storePartialItemStack(itemstack);
 			} while (itemstack.stackSize > 0 && itemstack.stackSize < i);
-			onInventoryChanged();
+			markDirty();
 			return itemstack.stackSize < i;
 		}
 		int j = getFirstEmptyStack();
@@ -87,7 +87,7 @@ public abstract class EntityChestBoat extends Entity implements IInventory {
 			cargo[j] = ItemStack.copyItemStack(itemstack);
 			cargo[j].animationsToGo = 5;
 			itemstack.stackSize = 0;
-			onInventoryChanged();
+			markDirty();
 			return true;
 		} else
 			return false;
@@ -141,7 +141,7 @@ public abstract class EntityChestBoat extends Entity implements IInventory {
 	}
 
 	@Override
-	public void closeChest() {
+	public void closeInventory() {
 	}
 
 	public void decrementAnimations() {
@@ -157,13 +157,13 @@ public abstract class EntityChestBoat extends Entity implements IInventory {
 			if (aitemstack[i].stackSize <= j) {
 				ItemStack itemstack = aitemstack[i];
 				aitemstack[i] = null;
-				onInventoryChanged();
+				markDirty();
 				return itemstack;
 			}
 			ItemStack itemstack1 = aitemstack[i].splitStack(j);
 			if (aitemstack[i].stackSize == 0)
 				aitemstack[i] = null;
-			onInventoryChanged();
+			markDirty();
 			return itemstack1;
 		} else
 			return null;
@@ -238,7 +238,7 @@ public abstract class EntityChestBoat extends Entity implements IInventory {
 	public abstract void handleSoundEffects();
 
 	@Override
-	public boolean func_145818_k_() {
+	public boolean hasCustomInventoryName() {
 		return false;
 	}
 
@@ -253,7 +253,7 @@ public abstract class EntityChestBoat extends Entity implements IInventory {
 	}
 
 	@Override
-	public void onInventoryChanged() {
+	public void markDirty() {
 		setFuelTime(cargo[0] != null ? Math.round(cargo[0].stackSize * 100 / 64) : 0);
 	}
 
@@ -267,9 +267,8 @@ public abstract class EntityChestBoat extends Entity implements IInventory {
 			this.setFuelTime(this.getFuelTime() - 1);
 		}
 		if (this.getFuelTime() == 0) {
-			if (this.riddenByEntity != null && this.riddenByEntity instanceof EntityPlayer && ((EntityPlayer) this.riddenByEntity).inventory.func_146028_b(Items.coal)) {
+			if (this.riddenByEntity != null && this.riddenByEntity instanceof EntityPlayer && ((EntityPlayer) this.riddenByEntity).inventory.consumeInventoryItem(Items.coal)) {
 				this.setFuelTime(getFuelDuration());
-				((EntityPlayer) this.riddenByEntity).inventory.func_146026_a(Items.coal);
 			}
 		}
 		this.prevPosX = this.posX;
@@ -380,9 +379,9 @@ public abstract class EntityChestBoat extends Entity implements IInventory {
 					int j1 = MathHelper.floor_double(this.posZ + (l / 2 - 0.5D) * 0.8D);
 					for (int k1 = 0; k1 < 2; ++k1) {
 						int l1 = MathHelper.floor_double(this.posY) + k1;
-						Block i2 = this.worldObj.func_147439_a(i1, l1, j1);
-						if (i2 == Blocks.snow) {
-							this.worldObj.func_147468_f(i1, l1, j1);
+						Block i2 = this.worldObj.getBlock(i1, l1, j1);
+						if (i2 == Blocks.snow_layer) {
+							this.worldObj.setBlockToAir(i1, l1, j1);
 						}
 					}
 				}
@@ -402,13 +401,13 @@ public abstract class EntityChestBoat extends Entity implements IInventory {
     public abstract double getMaxCollisionSpeed();
 
     @Override
-	public void openChest() {
+	public void openInventory() {
 	}
 
 	public void readFromNBT(NBTTagList nbttaglist) {
 		cargo = new ItemStack[5];
 		for (int i = 0; i < nbttaglist.tagCount(); i++) {
-			NBTTagCompound nbttagcompound = nbttaglist.func_150305_b(i);
+			NBTTagCompound nbttagcompound = nbttaglist.getCompoundTagAt(i);
 			int j = nbttagcompound.getByte("Slot") & 0xff;
 			ItemStack itemstack = ItemStack.loadItemStackFromNBT(nbttagcompound);
 			if (itemstack.getItem() == null)
@@ -416,7 +415,7 @@ public abstract class EntityChestBoat extends Entity implements IInventory {
 			if (j >= 0 && j < cargo.length)
 				cargo[j] = itemstack;
 		}
-		onInventoryChanged();
+		markDirty();
 	}
 
 	public void setDamageTaken(float par1) {
@@ -434,7 +433,7 @@ public abstract class EntityChestBoat extends Entity implements IInventory {
 	@Override
 	public void setInventorySlotContents(int i, ItemStack itemstack) {
 		cargo[i] = itemstack;
-		onInventoryChanged();
+		markDirty();
 	}
 
 	@Override

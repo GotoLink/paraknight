@@ -43,7 +43,7 @@ public abstract class EntitySteamBike extends EntityChestBoat {
 	public abstract double getFrictionFactor();
 
 	@Override
-	public String func_145825_b() {
+	public String getInventoryName() {
 		return "Steam Bike";
 	}
 

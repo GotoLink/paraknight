@@ -37,7 +37,7 @@ public class ItemSpawner extends Item {
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	public void func_150895_a(Item par1, CreativeTabs par2CreativeTabs, List par3List) {
+	public void getSubItems(Item par1, CreativeTabs par2CreativeTabs, List par3List) {
 		for (int j = 0; j < name.length; ++j) {
 			par3List.add(new ItemStack(par1, 1, j));
 		}
@@ -66,7 +66,7 @@ public class ItemSpawner extends Item {
 		float f8 = f3 * f5;
 		double d3 = 5.0D;
 		Vec3 vec31 = vec3.addVector(f7 * d3, f6 * d3, f8 * d3);
-		MovingObjectPosition movingobjectposition = par2World.clip(vec3, vec31, true);
+		MovingObjectPosition movingobjectposition = par2World.rayTraceBlocks(vec3, vec31, true);
 		if (movingobjectposition == null) {
 			return par1ItemStack;
 		} else {
@@ -93,7 +93,7 @@ public class ItemSpawner extends Item {
 					i = movingobjectposition.blockX;
 					int j = movingobjectposition.blockY;
 					int k = movingobjectposition.blockZ;
-					if (par2World.func_147439_a(i, j, k) == Blocks.snow) {
+					if (par2World.getBlock(i, j, k) == Blocks.snow) {
 						--j;
 					}
 					Entity entity = makeEntity(par1ItemStack, par2World, i + 0.5F, j + 1F, k + 0.5F);

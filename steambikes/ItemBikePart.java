@@ -30,7 +30,7 @@ public class ItemBikePart extends Item {
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	public void func_150895_a(Item par1, CreativeTabs par2CreativeTabs, List par3List) {
+	public void getSubItems(Item par1, CreativeTabs par2CreativeTabs, List par3List) {
 		for (int j = 0; j < name.length; ++j) {
 			par3List.add(new ItemStack(par1, 1, j));
 		}

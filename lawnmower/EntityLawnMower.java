@@ -38,7 +38,7 @@ public class EntityLawnMower extends EntityChestBoat {
 	}
 
 	@Override
-	public String func_145825_b() {
+	public String getInventoryName() {
 		return "Lawn Mower";
 	}
 
@@ -158,9 +158,9 @@ public class EntityLawnMower extends EntityChestBoat {
 			int var2 = MathHelper.floor_double(this.posX + (var1 % 2 - 0.5D) * 0.8D);
 			int var3 = MathHelper.floor_double(this.posY);
 			int var4 = MathHelper.floor_double(this.posZ + (var1 / 2 - 0.5D) * 0.8D);
-			Block var5 = this.worldObj.func_147439_a(var2, var3, var4);
+			Block var5 = this.worldObj.getBlock(var2, var3, var4);
 			if (var5 instanceof BlockTallGrass /* BlockFlower ? */&& this.riddenByEntity != null) {
-				this.worldObj.func_147468_f(var2, var3, var4);
+				this.worldObj.setBlockToAir(var2, var3, var4);
 				if (this.rand.nextInt(8) == 0 && !this.addItemStackToCargo(ForgeHooks.getGrassSeed(worldObj))) {
 					if (!this.worldObj.isRemote)
 						this.worldObj.spawnEntityInWorld(new EntityItem(this.worldObj, var2 + 0.5D, var3 + 0.5D, var4 + 0.5D, new ItemStack(var5, 1, this.worldObj.getBlockMetadata(
