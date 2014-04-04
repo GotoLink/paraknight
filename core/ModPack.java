@@ -1,5 +1,7 @@
 package core;
 
+import cpw.mods.fml.common.FMLCommonHandler;
+import cpw.mods.fml.common.ModContainer;
 import lawnmower.EntityLawnMower;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.init.Blocks;
@@ -20,7 +22,7 @@ import cpw.mods.fml.common.network.NetworkRegistry;
 import cpw.mods.fml.common.registry.EntityRegistry;
 import cpw.mods.fml.common.registry.GameRegistry;
 
-@Mod(modid = "paraknight", name = "Paraknight Mod Pack", version = "1.2")
+@Mod(modid = "paraknight", name = "Paraknight Mod Pack", useMetadata = true)
 public class ModPack {
     public final static String FOLDER = "paraknight:";
     @Instance("paraknight")
@@ -68,6 +70,16 @@ public class ModPack {
             GameRegistry.addRecipe(new ItemStack(ride, 1, 2), " B ", "III", 'B', Items.boat, 'I', Items.iron_ingot);
             EntityRegistry.registerModEntity(EntityLawnMower.class, "LawnMower", 3, this, 40, 1, true);
             GameRegistry.addShapelessRecipe(new ItemStack(ride, 1, 3), Items.iron_ingot, Items.wheat_seeds);
+        }
+        if(event.getSourceFile().getName().endsWith(".jar") && event.getSide().isClient()){
+            try {
+                Class.forName("mods.mud.ModUpdateDetector").getDeclaredMethod("registerMod", ModContainer.class, String.class, String.class).invoke(null,
+                        FMLCommonHandler.instance().findContainerFor(this),
+                        "https://raw.github.com/GotoLink/paraknight/master/update.xml",
+                        "https://raw.github.com/GotoLink/paraknight/master/changelog.md"
+                );
+            } catch (Throwable e) {
+            }
         }
 	}
 }

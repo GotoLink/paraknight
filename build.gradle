@@ -20,7 +20,7 @@ minecraft {
     assetDir = "eclipse/assets"
 }
 archivesBaseName = "ParaknightMods"
-version = "1.2(1.7.2)"
+version = "1.2"
 sourceSets.main.java{srcDirs project.projectDir.getPath() include("core/**" , "lawnmower/**", "steambikes/**")}
 sourceSets.main.resources{srcDirs project.projectDir.getPath() include("assets/paraknight/**" , "*.info", "*.mcmeta")}
 processResources {
@@ -34,4 +34,11 @@ processResources {
     from(project.sourceSets.main.resources.srcDirs) {
         include("assets/paraknight/**", "pack.mcmeta")
     }
+}
+jar {
+    //Keep the jar as clean as possible
+    includeEmptyDirs = false
+    //Append with minecraft version
+    classifier = "("+minecraft.version+")"
+    archiveName = archivesBaseName + "-" + version + classifier+"."+extension
 }

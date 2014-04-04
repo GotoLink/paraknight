@@ -2,6 +2,8 @@
 
 !gitignore
 !build.gradle
+!/gradle/
+!gradle*
 !mcmod.info
 !pack.mcmeta
 !/assets/
@@ -9,3 +11,5 @@
 !/tvmod/
 !/lawnmower/
 !/steambikes/
+!update.xml
+!changelog.md
