@@ -1,26 +1,26 @@
 <mod modid="paraknight">
     <mcVersion version="1.7.2">
         <release type="release" version="1.2"
-                 url="http://www.minecraftforum.net/topic/1651891-"
+                 url="http://www.minecraftforum.net/topic/1651891-/#SteamBikes"
                  download="http://www.mediafire.com/download/ow8opn880sz5804/ParaknightMods-1.2(1.7.2).jar"
                  md5="B0E40C882F31DAEEB7F9ACE432E366E0"
                 />
     </mcVersion>
 	<mcVersion version="1.6.4">
         <release type="release" version="1.1"
-                 url="http://www.minecraftforum.net/topic/1651891-"
+                 url="http://www.minecraftforum.net/topic/1651891-/#SteamBikes"
                  download="http://www.mediafire.com/download/907o38pp7manfl7/ParaKnight_mods_1.1(1.6.X).zip"
                  md5="D630253EFACB4BACB2606E4345426247"
                 />
     </mcVersion>
 	<mcVersion version="1.5.2">
         <release type="release" version="1.0"
-                 url="http://www.minecraftforum.net/topic/1651891-"
+                 url="http://www.minecraftforum.net/topic/1651891-/#SteamBikes"
                  download="http://www.mediafire.com/download/wkkumg672lam6u4/ParaKnight_mods_1.0(1.5.X).zip"
                  md5="344AA1DA732EC39F6366EFC143C9899F"
                 />
         <release type="release" version="0.1"
-                 url="http://www.minecraftforum.net/topic/1651891-"
+                 url="http://www.minecraftforum.net/topic/1651891-/#SteamBikes"
                  download="http://www.mediafire.com/download/c2qh5algkanhcdi/SteamBikes_0.1(1.5.X).zip"
                  md5=""
                 />
