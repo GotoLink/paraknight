@@ -12,7 +12,7 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
 public class ItemBikePart extends Item {
-	public static String[] name = new String[] { "bikewheel", "bikechassis", "steamengine" };
+	public static final String[] name = new String[] { "bikewheel", "bikechassis", "steamengine" };
 	private IIcon[] icon;
 
 	public ItemBikePart() {
@@ -47,6 +47,6 @@ public class ItemBikePart extends Item {
 	public void registerIcons(IIconRegister par1IconRegister) {
 		this.icon = new IIcon[name.length];
 		for (int i = 0; i < name.length; i++)
-			this.icon[i] = par1IconRegister.registerIcon("paraknight:" + this.name[i]);
+			this.icon[i] = par1IconRegister.registerIcon("paraknight:" + name[i]);
 	}
 }

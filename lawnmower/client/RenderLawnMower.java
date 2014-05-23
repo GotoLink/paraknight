@@ -14,7 +14,7 @@ import cpw.mods.fml.relauncher.SideOnly;
 public class RenderLawnMower extends Render {
 	private static final ResourceLocation blades = new ResourceLocation("paraknight", "textures/models/lawnmowerblades.png");
 	private static final ResourceLocation body = new ResourceLocation("paraknight", "textures/models/lawnmowerbody.png");
-	protected ModelLawnMower modelLawnMower = new ModelLawnMower();
+	protected final ModelLawnMower modelLawnMower = new ModelLawnMower();
 
 	public RenderLawnMower() {
 		this.shadowSize = 0.5F;

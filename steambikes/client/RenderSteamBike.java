@@ -12,7 +12,7 @@ import cpw.mods.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
 public class RenderSteamBike extends Render {
-	protected ModelSteamBike modelSteamBike = new ModelSteamBike();
+	protected final ModelSteamBike modelSteamBike = new ModelSteamBike();
 
 	public RenderSteamBike() {
 		shadowSize = 0.5F;

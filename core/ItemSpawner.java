@@ -18,7 +18,7 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
 public class ItemSpawner extends Item {
-	public static String[] name = new String[] { "maroonmarauder", "blackwidow", "lawnmower", "lawnmowerkey" };
+	public static final String[] name = new String[] { "maroonmarauder", "blackwidow", "lawnmower", "lawnmowerkey" };
 	protected IIcon[] icon;
 
 	public ItemSpawner() {
@@ -121,7 +121,7 @@ public class ItemSpawner extends Item {
 	public void registerIcons(IIconRegister par1IconRegister) {
 		this.icon = new IIcon[name.length];
 		for (int i = 0; i < name.length; i++)
-			this.icon[i] = par1IconRegister.registerIcon("paraknight:" + this.name[i]);
+			this.icon[i] = par1IconRegister.registerIcon("paraknight:" + name[i]);
 	}
 
 	protected Entity makeEntity(ItemStack par1ItemStack, World par2World, double d, double e, double f) {

@@ -274,7 +274,6 @@ public abstract class EntityChestBoat extends Entity implements IInventory {
 		this.prevPosX = this.posX;
 		this.prevPosY = this.posY;
 		this.prevPosZ = this.posZ;
-		double d0 = 0.0D;
 		double d3 = Math.sqrt(this.motionX * this.motionX + this.motionZ * this.motionZ);
 		double d4;
 		double d5;

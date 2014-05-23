@@ -30,7 +30,6 @@ public class ModPack {
 	@SidedProxy(clientSide = "core.ClientProxy", serverSide = "core.CommonProxy")
 	public static CommonProxy proxy;
 	public static Item ride, wrench, bikePart;
-	private static boolean enableBikes, enableLawnMower;
 
 	@EventHandler
 	public void load(FMLInitializationEvent event) {
@@ -41,8 +40,8 @@ public class ModPack {
 	@EventHandler
 	public void preLoad(FMLPreInitializationEvent event) {
         Configuration config = new Configuration(event.getSuggestedConfigurationFile());
-        enableBikes = config.get("General", "EnableSteamBikes", true).getBoolean(true);
-        enableLawnMower = config.get("General", "EnableLawnMawer", true).getBoolean(true);
+        boolean enableBikes = config.get("General", "EnableSteamBikes", true).getBoolean(true);
+        boolean enableLawnMower = config.get("General", "EnableLawnMawer", true).getBoolean(true);
         if(config.hasChanged())
             config.save();
         if (enableBikes || enableLawnMower) {

@@ -15,7 +15,7 @@ import cpw.mods.fml.relauncher.SideOnly;
 @SideOnly(Side.CLIENT)
 public class HUDLawnMower extends Gui {
 	private final static ResourceLocation hud = new ResourceLocation("paraknight", "textures/gui/lawnmowerhud.png");
-	private Minecraft game;
+	private final Minecraft game;
 	private int wave = 0;
 	private int windowWidth;
 

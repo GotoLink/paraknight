@@ -9,7 +9,7 @@ import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
 
 public class ContainerBase extends Container {
-	protected IInventory inv;
+	protected final IInventory inv;
 
 	public ContainerBase(IInventory ridingEntity, InventoryPlayer playerInv) {
 		this.inv = ridingEntity;
@@ -51,7 +51,7 @@ public class ContainerBase extends Container {
 			} else
 				this.mergeItemStack(itemstack1, 1, this.inv.getSizeInventory(), false);
 			if (itemstack1.stackSize == 0) {
-				slot.putStack((ItemStack) null);
+				slot.putStack(null);
 			} else {
 				slot.onSlotChanged();
 			}
