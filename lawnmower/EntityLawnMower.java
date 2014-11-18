@@ -97,7 +97,7 @@ public class EntityLawnMower extends EntityChestBoat {
 				if (this.addFuel()) {
 					--var2.stackSize;
 					if (var2.stackSize <= 0) {
-						var1.inventory.mainInventory[var1.inventory.currentItem] = null;
+						var1.inventory.setInventorySlotContents(var1.inventory.currentItem, null);
 					}
 					return true;
 				}
