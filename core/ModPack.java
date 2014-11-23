@@ -21,6 +21,9 @@ import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.network.NetworkRegistry;
 import cpw.mods.fml.common.registry.EntityRegistry;
 import cpw.mods.fml.common.registry.GameRegistry;
+import tvmod.EntityTV;
+import tvmod.ItemTV;
+import tvmod.ItemTVRemote;
 
 @Mod(modid = "paraknight", name = "Paraknight Mod Pack", useMetadata = true)
 public class ModPack {
@@ -30,6 +33,9 @@ public class ModPack {
 	@SidedProxy(clientSide = "core.ClientProxy", serverSide = "core.CommonProxy")
 	public static CommonProxy proxy;
 	public static Item ride, wrench, bikePart;
+    public static boolean HD = true, shuffle = false;
+    public static int width, height, soundRange;
+    public static Item tv, tvRemote;
 
 	@EventHandler
 	public void load(FMLInitializationEvent event) {
@@ -42,8 +48,7 @@ public class ModPack {
         Configuration config = new Configuration(event.getSuggestedConfigurationFile());
         boolean enableBikes = config.get("General", "EnableSteamBikes", true).getBoolean(true);
         boolean enableLawnMower = config.get("General", "EnableLawnMawer", true).getBoolean(true);
-        if(config.hasChanged())
-            config.save();
+        boolean enableTVMod = config.get("General", "EnableTVMod", true).getBoolean(true);
         if (enableBikes || enableLawnMower) {
             ride = new ItemSpawner().setUnlocalizedName("paraknight:").setTextureName("paraknight:");
             wrench = new Item().setMaxStackSize(1).setMaxDamage(100).setUnlocalizedName("paraknight:wrench").setCreativeTab(CreativeTabs.tabTransport).setTextureName("paraknight:wrench");
@@ -70,6 +75,20 @@ public class ModPack {
             EntityRegistry.registerModEntity(EntityLawnMower.class, "LawnMower", 3, this, 40, 1, true);
             GameRegistry.addShapelessRecipe(new ItemStack(ride, 1, 3), Items.iron_ingot, Items.wheat_seeds);
         }
+        if(enableTVMod){
+            tv = new ItemTV();
+            tvRemote = new ItemTVRemote();
+            GameRegistry.addShapelessRecipe(new ItemStack(tvRemote), Items.redstone, Items.iron_ingot);
+            GameRegistry.addRecipe(new ItemStack(tv), "G", "P", "R", 'G', Blocks.glass, 'P', Items.painting, 'R', Items.redstone);
+            EntityRegistry.registerModEntity(EntityTV.class, "TV", 4, this, 50, 3, false);
+            width = config.getInt("TvWidth", "TV", 4, 0, 16, "Size in blocks");
+            height = config.getInt("TvHeight", "TV", 2, 0, 16, "Size in blocks");
+            soundRange = config.getInt("SoundRange", "TV", 40, 0, 100, "Radius in blocks");
+            HD = config.getBoolean("HDEnabled", "TV", true, "");
+            shuffle = config.getBoolean("ShuffleEnabled", "TV", false, "");
+        }
+        if(config.hasChanged())
+            config.save();
         if(event.getSourceFile().getName().endsWith(".jar") && event.getSide().isClient()){
             try {
                 Class.forName("mods.mud.ModUpdateDetector").getDeclaredMethod("registerMod", ModContainer.class, String.class, String.class).invoke(null,

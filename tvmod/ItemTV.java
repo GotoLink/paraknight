@@ -1,32 +1,19 @@
 package tvmod;
 
-import java.io.File;
-import java.util.ArrayList;
-
-import net.minecraft.client.Minecraft;
+import cpw.mods.fml.common.registry.GameRegistry;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 
-public class ItemTV extends Item {
-	
-	public static ArrayList<String> videoPathes = new ArrayList<String>();
+public final class ItemTV extends Item {
 
-	public ItemTV(int i) {
-		super(i);
+	public ItemTV() {
+		super();
+        setTextureName("tvmod:tv");
 		setUnlocalizedName("tv");
 		setMaxStackSize(1);
-		loadVideoPathes();
-	}
-	
-	private void loadVideoPathes() {
-		File files[] = null, dir = new File(Minecraft.getMinecraft().mcDataDir+"/resources/mod/TV/");
-		if (dir.exists() || dir.mkdirs())
-			files = dir.listFiles();
-		if(files!=null)
-			for (int i = 0; i < files.length; i++)
-				videoPathes.add(files[i].toString());
+        GameRegistry.registerItem(this, "tv");
 	}
 	
 	@Override

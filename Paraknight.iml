@@ -8,7 +8,6 @@
       <excludeFolder url="file://$MODULE_DIR$/build" />
       <excludeFolder url="file://$MODULE_DIR$/eclipse" />
       <excludeFolder url="file://$MODULE_DIR$/gradle" />
-      <excludeFolder url="file://$MODULE_DIR$/tvmod" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
@@ -36,6 +35,24 @@
     <orderEntry type="library" exported="" name="Gradle: jinput-platform-2.0.5-natives-linux" level="project" />
     <orderEntry type="library" exported="" name="Gradle: lwjgl-2.9.1" level="project" />
     <orderEntry type="library" exported="" name="Gradle: forgeSrc-1.7.10-10.13.2.1230" level="project" />
+    <orderEntry type="module-library" exported="">
+      <library name="xuggle-xuggler-5.4">
+        <CLASSES>
+          <root url="jar://$MODULE_DIR$/../../Caches/.gradle/caches/modules-2/files-2.1/xuggle/xuggle-xuggler/5.4/53a5b0f219d86c2fd570675fcbaa6a6c1a0626e8/xuggle-xuggler-5.4.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library" exported="">
+      <library name="slf4j-api-1.7.7">
+        <CLASSES>
+          <root url="jar://$MODULE_DIR$/../../Caches/.gradle/caches/modules-2/files-2.1/org.slf4j/slf4j-api/1.7.7/2b8019b6249bb05d81d3a3094e468753e2b21311/slf4j-api-1.7.7.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
   </component>
 </module>
 

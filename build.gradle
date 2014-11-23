@@ -15,16 +15,39 @@ buildscript {
     }
 }
 apply plugin: 'forge'
+
 sourceCompatibility = 1.6
 targetCompatibility = 1.6
+archivesBaseName = "ParaknightMods"
+version = "1.3"
+group = "com.github.paraknight"
 minecraft {
     version = "1.7.10-10.13.2.1230"
     runDir = "eclipse"
 }
-archivesBaseName = "ParaknightMods"
-version = "1.2"
-sourceSets.main.java{srcDirs project.projectDir.getPath() include("core/**" , "lawnmower/**", "steambikes/**")}
-sourceSets.main.resources{srcDirs project.projectDir.getPath() include("assets/paraknight/**" , "*.info", "*.mcmeta")}
+
+configurations{//define additional dependencies for tvmod
+    modDeps
+}
+repositories {//where the additional dependencies can be found remotely
+    mavenCentral()
+    maven {
+        name = "xuggle"
+        url = "http://xuggle.googlecode.com/svn/trunk/repo/share/java/"
+    }
+}
+
+sourceSets.main {
+    java { srcDirs project.projectDir.getPath() include("core/**", "lawnmower/**", "steambikes/**", "tvmod/**") }
+    resources { srcDirs project.projectDir.getPath() include("assets/**", "*.info", "*.mcmeta") }
+    compileClasspath += configurations.modDeps
+}
+
+dependencies {//the additional dependencies for tvmod
+    modDeps 'xuggle:xuggle-xuggler:5.4'
+    modDeps 'org.slf4j:slf4j-api:1.7.7'
+}
+
 processResources {
     // this will ensure that this task is redone when the versions change.
     inputs.property "version", project.version
@@ -37,13 +60,37 @@ processResources {
     }
     // copy everything else, thats not mcmod.info
     from(project.sourceSets.main.resources.srcDirs) {
-        include("assets/paraknight/**", "pack.mcmeta")
+        include "assets/**", "*.mcmeta"
     }
 }
-jar {
+
+jar{
     //Keep the jar as clean as possible
     includeEmptyDirs = false
     //Append with minecraft version
     classifier = "("+minecraft.version+")"
     archiveName = archivesBaseName + "-" + version + classifier+"."+extension
+}
+
+//Optional: build the fat jar with included dependencies
+task fatJar(type: Jar, dependsOn: build) {
+    //copy files from deps
+    from(configurations.modDeps.collect { zipTree(it) }){
+        exclude 'META-INF/MANIFEST.MF'
+    }
+    //copy files from mod
+    from(zipTree(file("build/libs/"+archivesBaseName + "-" + version +"("+minecraft.version+").jar")))
+    //Keep the jar as clean as possible
+    includeEmptyDirs = false
+    //Append with minecraft version
+    classifier = "("+minecraft.version+")-fat"
+    archiveName = archivesBaseName + "-" + version + classifier+"."+extension
+    //Merge manifest files from deps
+    manifest{
+        def depClasses = configurations.modDeps.collect { it.isDirectory() ? it : zipTree(it) }
+        def manifests = files(depClasses).filter(){
+            file -> file.name.contains('MANIFEST.MF')
+        }.toList()
+        from(manifests)
+    }
 }

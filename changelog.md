@@ -1,3 +1,6 @@
+== Paraknight Mod Pack 1.3 ==
+* Added TV mod (with toggle in configuration file, so that dependencies are optional)
+
 == Paraknight Mod Pack 1.2 ==
 * Update to 1.7.2
 * Fixed lawnmower and bikes breaking too often

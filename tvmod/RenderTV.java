@@ -1,16 +1,16 @@
 package tvmod;
 
+import core.ModPack;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.entity.Render;
-import net.minecraft.client.renderer.texture.DynamicTexture;
+import net.minecraft.client.renderer.texture.TextureUtil;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.ResourceLocation;
-
 import org.lwjgl.opengl.GL11;
 
 public class RenderTV extends Render {
 
-	private void renderTV(EntityTV entityTV, int width, int height) {
+	private void renderTV(int width, int height) {
 		float f = (float) (-width) / 2.0F;
 		float f1 = (float) (-height) / 2.0F;
 		float f2 = -0.5F;
@@ -75,26 +75,21 @@ public class RenderTV extends Render {
 	}
 
 	@Override
-	public void doRender(Entity entityTV, double d, double d1, double d2,
-			float f, float f1) {
+	public void doRender(Entity entityTV, double d, double d1, double d2, float f, float f1) {
 		GL11.glPushMatrix();
 		GL11.glTranslatef((float) d, (float) d1, (float) d2);
 		GL11.glRotatef(f, 0.0F, 1.0F, 0.0F);
 		GL11.glEnable(32826 /* GL_RESCALE_NORMAL_EXT */);
-		bindEntityTexture(entityTV);
-		float f2 = mod_TVMod.isHDEnabled ? 0.015625F : 0.0625F;
+        TextureUtil.uploadTextureImage(((EntityTV) entityTV).frameIntBuffer.get(0), ((EntityTV)entityTV).lastFrame);
+		float f2 = ModPack.HD ? 0.015625F : 0.0625F;
 		GL11.glScalef(f2, f2, f2);
-		renderTV((EntityTV) entityTV, mod_TVMod.tvProps[2] * 16
-				* (mod_TVMod.isHDEnabled ? 4 : 1), mod_TVMod.tvProps[3] * 16
-				* (mod_TVMod.isHDEnabled ? 4 : 1));
+		renderTV(ModPack.width * 16 * (ModPack.HD ? 4 : 1), ModPack.height * 16 * (ModPack.HD ? 4 : 1));
 		GL11.glDisable(32826 /* GL_RESCALE_NORMAL_EXT */);
 		GL11.glPopMatrix();
 	}
 
 	@Override
 	protected ResourceLocation getEntityTexture(Entity entityTV) {
-		return renderManager.renderEngine.getDynamicTextureLocation(
-				((EntityTV) entityTV).frameIntBuffer.get(0) + "",
-				new DynamicTexture(((EntityTV) entityTV).lastFrame));
+		return null;
 	}
 }

@@ -3,6 +3,7 @@ package core;
 import lawnmower.EntityLawnMower;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
+import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.World;
 import steambikes.EntitySteamBike;
 import cpw.mods.fml.common.network.IGuiHandler;
@@ -32,4 +33,8 @@ public class CommonProxy implements IGuiHandler {
 
 	public void registerHandlers() {
 	}
+
+    public MovingObjectPosition getMouseOver(){
+        return null;
+    }
 }

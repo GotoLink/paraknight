@@ -1,41 +1,41 @@
 package tvmod;
 
-import java.awt.Graphics2D;
-import java.awt.RenderingHints;
-import java.awt.image.BufferedImage;
-import java.io.IOException;
-import java.io.InputStream;
-import java.nio.IntBuffer;
-import java.util.List;
-import java.util.Random;
-
-import javax.imageio.ImageIO;
-import javax.sound.sampled.AudioFormat;
-import javax.sound.sampled.AudioSystem;
-import javax.sound.sampled.DataLine;
-import javax.sound.sampled.FloatControl;
-import javax.sound.sampled.LineUnavailableException;
-import javax.sound.sampled.SourceDataLine;
-
+import com.xuggle.xuggler.*;
+import core.ModPack;
+import cpw.mods.fml.client.FMLClientHandler;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.material.Material;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GLAllocation;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EnumCreatureType;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
-import paulscode.sound.ICodec;
+import org.lwjgl.opengl.GL11;
+
+import javax.imageio.ImageIO;
+import javax.sound.sampled.*;
+import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.nio.IntBuffer;
+import java.util.ArrayList;
+import java.util.List;
 
 public class EntityTV extends Entity implements Runnable{
-
+    public static ArrayList<String> videoPathes;
 	private int tickCounter;
 	public int direction, xPos, yPos, zPos;
-	private String currentVideoPath = mod_TVMod.isShuffleEnabled?getRandomVideoPath():getNextVideoPath();
+	private String currentVideoPath;
 	public BufferedImage lastFrame, noSignal;
-	public IntBuffer frameIntBuffer = GLAllocation.createDirectIntBuffer(1);
+	public IntBuffer frameIntBuffer;
 	private SourceDataLine soundLine;
 	public boolean isVideoPaused = false, shouldSkip = false, isVideoOver = false, isVideoPlaying = false;
 
@@ -45,51 +45,49 @@ public class EntityTV extends Entity implements Runnable{
 		direction = 0;
 		yOffset = 0.0F;
 		setSize(0.5F, 0.5F);
-		intitScreenBuffer();
 	}
 
 	public EntityTV(World world, int i, int j, int k, int l) {
-		super(world);
+		this(world);
 		xPos = i;
 		yPos = j;
 		zPos = k;
-		tickCounter = 0;
-		direction = 0;
-		yOffset = 0.0F;
-		setSize(0.5F, 0.5F);
-		intitScreenBuffer();
 		setPosAndAABB(l);
 	}
 
+    @Override
 	protected void entityInit() {
 	}
 
-	private void intitScreenBuffer() {
-		InputStream inputstream = RenderTV.class.getResourceAsStream("nosignal.png");
+    @SideOnly(Side.CLIENT)
+	private void initScreenBuffer() {
+        frameIntBuffer = GLAllocation.createDirectIntBuffer(1);
+		InputStream inputstream = this.getClass().getResourceAsStream("/assets/tvmod/textures/nosignal.png");
 		try {
 			BufferedImage noSignalImage = new BufferedImage(256, 256, BufferedImage.TYPE_INT_ARGB);
 			Graphics2D graphics2D = noSignalImage.createGraphics();
 			graphics2D.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BICUBIC);
-			graphics2D.drawImage(ImageIO.read(inputstream), 0, 0, mod_TVMod.tvProps[2]*16*(mod_TVMod.isHDEnabled?4:1), mod_TVMod.tvProps[3]*16*(mod_TVMod.isHDEnabled?4:1), null);
+			graphics2D.drawImage(ImageIO.read(inputstream), 0, 0, ModPack.width*16*(ModPack.HD?4:1), ModPack.height*16*(ModPack.HD?4:1), null);
 			lastFrame = noSignal = noSignalImage;
 			inputstream.close();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 		frameIntBuffer.clear();
-		GLAllocation.generateTextureNames(frameIntBuffer);
+        GL11.glGenTextures(frameIntBuffer);
+		//GLAllocation.generateTextureNames(frameIntBuffer);
 	}
 
 	public void setPosAndAABB(int orientation) {
 		direction = orientation;
 		prevRotationYaw = rotationYaw = orientation * 90;
-		float xSize = mod_TVMod.tvProps[2];
-		float ySize = mod_TVMod.tvProps[3];
-		float zSize = mod_TVMod.tvProps[2];
+		float xSize = ModPack.width;
+		float ySize = ModPack.height;
+		float zSize = ModPack.width;
 		if (orientation == 0 || orientation == 2)
-			zSize = mod_TVMod.isHDEnabled?0.0625F:0.015625F;
+			zSize = ModPack.HD?0.0625F:0.015625F;
 		else
-			xSize = mod_TVMod.isHDEnabled?0.0625F:0.015625F;
+			xSize = ModPack.HD?0.0625F:0.015625F;
 		float xPosBlock = (float) xPos + 0.5F;
 		float yPosBlock = (float) yPos + 0.5F;
 		float zPosBlock = (float) zPos + 0.5F;
@@ -120,41 +118,67 @@ public class EntityTV extends Entity implements Runnable{
 	
 	@Override
 	public void onUpdate() {
-		if (soundLine!=null&&soundLine.isControlSupported(FloatControl.Type.MASTER_GAIN))
-			((FloatControl) soundLine.getControl(FloatControl.Type.MASTER_GAIN)).setValue(calculateVolume());
-		if (isVideoOver) {
-			shouldSkip = false;
-			isVideoOver = false;
-			if(isVideoPaused){
-				isVideoPaused = false;
-				return;
-			}
-			currentVideoPath = mod_TVMod.isShuffleEnabled?getRandomVideoPath():getNextVideoPath();
-			new Thread(this, "TVMod Processing").start();
-		}
-		if (tickCounter++ == 100 && !worldObj.isRemote) {
+        if(worldObj.isRemote) {
+            if (videoPathes == null) {
+                videoPathes = new ArrayList<String>();
+                loadVideoPathes();
+            }
+            if(currentVideoPath == null)
+                currentVideoPath = ModPack.shuffle?getRandomVideoPath():getNextVideoPath();
+            if (noSignal == null) {
+                initScreenBuffer();
+            }
+            if (soundLine != null && soundLine.isControlSupported(FloatControl.Type.MASTER_GAIN))
+                ((FloatControl) soundLine.getControl(FloatControl.Type.MASTER_GAIN)).setValue(calculateVolume());
+            if (isVideoOver) {
+                shouldSkip = false;
+                isVideoOver = false;
+                if (isVideoPaused) {
+                    isVideoPaused = false;
+                    return;
+                }
+                currentVideoPath = ModPack.shuffle ? getRandomVideoPath() : getNextVideoPath();
+                new Thread(this, "TVMod Processing").start();
+            }
+        }else if (tickCounter++ >= 100) {
 			tickCounter = 0;
 			if (!canStay()) {
 				setDead();
-				worldObj.spawnEntityInWorld(new EntityItem(worldObj, posX, posY, posZ, new ItemStack(mod_TVMod.tv)));
 			}
 		}
 	}
 
+    @Override
+    public void setDead(){
+        super.setDead();
+        if(!worldObj.isRemote)
+            worldObj.spawnEntityInWorld(new EntityItem(worldObj, posX, posY, posZ, new ItemStack(ModPack.tv)));
+    }
+
+    @SideOnly(Side.CLIENT)
+    private void loadVideoPathes() {
+        File files[] = null, dir = new File(FMLClientHandler.instance().getClient().mcDataDir+"/resources/mod/TV/");
+        if (dir.exists() || dir.mkdirs())
+            files = dir.listFiles();
+        if(files!=null)
+            for (File file : files)
+                videoPathes.add(file.toString());
+    }
+
 	private float calculateVolume() {
 		float distToPlayer = getDistanceToEntity(this.worldObj.getClosestPlayerToEntity(this, 50));
-		if(distToPlayer>mod_TVMod.tvProps[4])
+		if(distToPlayer>ModPack.soundRange)
 			return -80;
 		if(distToPlayer==0)
 			return 6;
-		return ((1-(distToPlayer/mod_TVMod.tvProps[4]))*86)-80;
+		return ((1-(distToPlayer/ModPack.soundRange))*86)-80;
 	}
 
 	public boolean canStay() {
 		if (worldObj.getCollidingBoundingBoxes(this, boundingBox).size() > 0)
 			return false;
-		int xBlockSize = mod_TVMod.tvProps[2];
-		int yBlockSize = mod_TVMod.tvProps[3];
+		int xBlockSize = ModPack.width;
+		int yBlockSize = ModPack.height;
 		int xBlockPos = xPos;
 		int yBlockPos = yPos;
 		int zBlockPos = zPos;
@@ -171,16 +195,16 @@ public class EntityTV extends Entity implements Runnable{
 			for (int j = 0; j < yBlockSize; j++) {
 				Material material;
 				if (direction == 0 || direction == 2)
-					material = worldObj.getBlockMaterial(xBlockPos + i, yBlockPos + j, zPos);
+					material = worldObj.getBlock(xBlockPos + i, yBlockPos + j, zPos).getMaterial();
 				else
-					material = worldObj.getBlockMaterial(xPos, yBlockPos + j, zBlockPos + i);
+					material = worldObj.getBlock(xPos, yBlockPos + j, zBlockPos + i).getMaterial();
 				if (!material.isSolid())
 					return false;
 			}
-		List<?> list = worldObj.getEntitiesWithinAABBExcludingEntity(this,	boundingBox);
-		for (int l1 = 0; l1 < list.size(); l1++)
-			if (list.get(l1) instanceof EntityTV)
-				return false;
+		List<?> list = worldObj.getEntitiesWithinAABBExcludingEntity(this, boundingBox);
+        for (Object object : list)
+            if (object instanceof EntityTV)
+                return false;
 		return true;
 	}
 	
@@ -189,11 +213,23 @@ public class EntityTV extends Entity implements Runnable{
 		return true;
 	}
 
-	public boolean attackEntityFrom(DamageSource src, int i) {
-		if (!isDead && !worldObj.isRemote) {
+    @Override
+    public AxisAlignedBB getCollisionBox(Entity entity)
+    {
+        return entity.boundingBox;
+    }
+
+    @Override
+    public boolean isPushedByWater()
+    {
+        return false;
+    }
+
+    @Override
+	public boolean attackEntityFrom(DamageSource src, float i) {
+		if (i>0.001F && !isDead && !worldObj.isRemote) {
 			setBeenAttacked();
 			setDead();
-			worldObj.spawnEntityInWorld(new EntityItem(worldObj, posX, posY,	posZ, new ItemStack(mod_TVMod.tv)));
 		}
 		return true;
 	}
@@ -204,7 +240,8 @@ public class EntityTV extends Entity implements Runnable{
 		nbttagcompound.setInteger("TileY", yPos);
 		nbttagcompound.setInteger("TileZ", zPos);
 		nbttagcompound.setByte("Dir", (byte) direction);
-		nbttagcompound.setString("VidPath", currentVideoPath);
+        if(currentVideoPath!=null)
+		    nbttagcompound.setString("VidPath", currentVideoPath);
 	}
 	
 	@Override
@@ -219,37 +256,42 @@ public class EntityTV extends Entity implements Runnable{
 	
 	@Override
 	public void moveEntity(double d, double d1, double d2) {
-		if (!worldObj.isRemote && d * d + d1 * d1 + d2 * d2 > 0.0D) {
+		if (d * d + d1 * d1 + d2 * d2 > 0.001D) {
 			setDead();
-			worldObj.spawnEntityInWorld(new EntityItem(worldObj, posX, posY, posZ, new ItemStack(mod_TVMod.tv)));
 		}
 	}
 	
 	@Override
 	public void addVelocity(double d, double d1, double d2) {
-		if (!worldObj.isRemote && d * d + d1 * d1 + d2 * d2 > 0.0D) {
+		if (d * d + d1 * d1 + d2 * d2 > 0.001D) {
 			setDead();
-			worldObj.spawnEntityInWorld(new EntityItem(worldObj, posX, posY, posZ, new ItemStack(mod_TVMod.tv)));
 		}
 	}
 
+    @Override
+    public boolean isCreatureType(EnumCreatureType type, boolean forSpawnCount){
+        return false;
+    }
+
+    @SideOnly(Side.CLIENT)
 	private String getRandomVideoPath() {
-		if(ItemTV.videoPathes.size()<1)
+		if(videoPathes.size()<1)
 			return null;
-		return ItemTV.videoPathes.get(new Random().nextInt(ItemTV.videoPathes.size()));
+		return videoPathes.get(this.rand.nextInt(videoPathes.size()));
 	}
 
+    @SideOnly(Side.CLIENT)
 	private String getNextVideoPath() {
-		if(ItemTV.videoPathes.size()<1)
+		if(videoPathes.size()<1)
 			return null;
 		boolean pathFound = false;
-		for (String path : ItemTV.videoPathes) {
+		for (String path : videoPathes) {
 			if(pathFound)
 				return path;
 			if(path.equals(currentVideoPath))
 				pathFound = true;
 		}
-		return ItemTV.videoPathes.get(0);
+		return videoPathes.get(0);
 	}
 
 	@Override
@@ -257,7 +299,7 @@ public class EntityTV extends Entity implements Runnable{
 		isVideoPlaying  = true;
 		IContainer container = IContainer.make();
 		if(container.open(currentVideoPath, IContainer.Type.READ, null) < 0)
-			if(container.open(currentVideoPath = mod_TVMod.isShuffleEnabled?getRandomVideoPath():getNextVideoPath(), IContainer.Type.READ, null) < 0)
+			if(container.open(currentVideoPath = ModPack.shuffle?getRandomVideoPath():getNextVideoPath(), IContainer.Type.READ, null) < 0)
 				throw new IllegalArgumentException("Could not open video files.");
 
 		IStreamCoder videoCoder=null, audioCoder=null;
@@ -267,11 +309,11 @@ public class EntityTV extends Entity implements Runnable{
 			IStream stream = container.getStream(i);
 			IStreamCoder coder = stream.getStreamCoder();
 
-			if (videoStreamID == -1 && coder.getCodecType() == ICodec.Type.CODEC_TYPE_VIDEO) {
+			if (videoStreamID == -1 && coder.getCodecType() == com.xuggle.xuggler.ICodec.Type.CODEC_TYPE_VIDEO) {
 				videoStreamID = i;
 				videoCoder = coder;
 			}
-			else if (audioStreamID == -1 && coder.getCodecType() == ICodec.Type.CODEC_TYPE_AUDIO) {
+			else if (audioStreamID == -1 && coder.getCodecType() == com.xuggle.xuggler.ICodec.Type.CODEC_TYPE_AUDIO) {
 				audioStreamID = i;
 				audioCoder = coder;
 			}
@@ -325,7 +367,7 @@ public class EntityTV extends Entity implements Runnable{
 									BufferedImage scaledImage = new BufferedImage(256, 256, BufferedImage.TYPE_INT_ARGB);
 									Graphics2D graphics2D = scaledImage.createGraphics();
 									graphics2D.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BICUBIC);
-									graphics2D.drawImage(Utils.videoPictureToImage(newPict), 0, 0, mod_TVMod.tvProps[2]*16*(mod_TVMod.isHDEnabled?4:1), mod_TVMod.tvProps[3]*16*(mod_TVMod.isHDEnabled?4:1), null);
+									graphics2D.drawImage(Utils.videoPictureToImage(newPict), 0, 0, ModPack.width*16*(ModPack.HD?4:1), ModPack.height*16*(ModPack.HD?4:1), null);
 									lastFrame = scaledImage;
 								}
 							}
@@ -379,7 +421,7 @@ public class EntityTV extends Entity implements Runnable{
 		} else {
 			final long millisecondsToSleep = (((pict.getTimeStamp()-firstTimestampInStream)/1000)-(System.currentTimeMillis() - systemClockStartTime + 50 /*tolerance*/));
 			if (millisecondsToSleep > 0) {
-				try{Thread.sleep(millisecondsToSleep);}catch(InterruptedException e){}}
+				try{Thread.sleep(millisecondsToSleep);}catch(InterruptedException ignored){}}
 		}
 	}
 }
