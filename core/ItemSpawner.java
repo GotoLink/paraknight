@@ -1,7 +1,7 @@
 package core;
 
-import java.util.List;
-
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import lawnmower.EntityLawnMower;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.creativetab.CreativeTabs;
@@ -14,8 +14,8 @@ import net.minecraft.util.*;
 import net.minecraft.world.World;
 import steambikes.EntityBlackWidow;
 import steambikes.EntityMaroonMarauder;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+
+import java.util.List;
 
 public class ItemSpawner extends Item {
 	public static final String[] name = new String[] { "maroonmarauder", "blackwidow", "lawnmower", "lawnmowerkey" };

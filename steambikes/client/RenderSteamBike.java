@@ -1,17 +1,15 @@
 package steambikes.client;
 
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.ResourceLocation;
-
 import org.lwjgl.opengl.GL11;
-
 import steambikes.EntitySteamBike;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
-public class RenderSteamBike extends Render {
+public final class RenderSteamBike extends Render {
 	protected final ModelSteamBike modelSteamBike = new ModelSteamBike();
 
 	public RenderSteamBike() {

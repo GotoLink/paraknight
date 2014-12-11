@@ -1,7 +1,16 @@
 package core;
 
 import cpw.mods.fml.common.FMLCommonHandler;
+import cpw.mods.fml.common.Mod;
+import cpw.mods.fml.common.Mod.EventHandler;
+import cpw.mods.fml.common.Mod.Instance;
 import cpw.mods.fml.common.ModContainer;
+import cpw.mods.fml.common.SidedProxy;
+import cpw.mods.fml.common.event.FMLInitializationEvent;
+import cpw.mods.fml.common.event.FMLPreInitializationEvent;
+import cpw.mods.fml.common.network.NetworkRegistry;
+import cpw.mods.fml.common.registry.EntityRegistry;
+import cpw.mods.fml.common.registry.GameRegistry;
 import lawnmower.EntityLawnMower;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.init.Blocks;
@@ -12,21 +21,12 @@ import net.minecraftforge.common.config.Configuration;
 import steambikes.EntityBlackWidow;
 import steambikes.EntityMaroonMarauder;
 import steambikes.ItemBikePart;
-import cpw.mods.fml.common.Mod;
-import cpw.mods.fml.common.Mod.EventHandler;
-import cpw.mods.fml.common.Mod.Instance;
-import cpw.mods.fml.common.SidedProxy;
-import cpw.mods.fml.common.event.FMLInitializationEvent;
-import cpw.mods.fml.common.event.FMLPreInitializationEvent;
-import cpw.mods.fml.common.network.NetworkRegistry;
-import cpw.mods.fml.common.registry.EntityRegistry;
-import cpw.mods.fml.common.registry.GameRegistry;
 import tvmod.EntityTV;
 import tvmod.ItemTV;
 import tvmod.ItemTVRemote;
 
 @Mod(modid = "paraknight", name = "Paraknight Mod Pack", useMetadata = true)
-public class ModPack {
+public final class ModPack {
     public final static String FOLDER = "paraknight:";
     @Instance("paraknight")
 	public static ModPack instance;

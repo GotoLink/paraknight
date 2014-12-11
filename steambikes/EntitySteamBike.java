@@ -1,18 +1,16 @@
 package steambikes;
 
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Items;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.DamageSource;
-import net.minecraft.world.World;
-
-import org.lwjgl.input.Keyboard;
-
 import core.CommonProxy;
 import core.EntityChestBoat;
 import core.ModPack;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Items;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.DamageSource;
+import net.minecraft.world.World;
+import org.lwjgl.input.Keyboard;
 
 public abstract class EntitySteamBike extends EntityChestBoat {
 	public float wheelAngle = 0, turnAngle = 0;

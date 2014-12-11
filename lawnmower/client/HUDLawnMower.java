@@ -1,19 +1,17 @@
 package lawnmower.client;
 
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import lawnmower.EntityLawnMower;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
-
 import org.lwjgl.opengl.GL11;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
-
 @SideOnly(Side.CLIENT)
-public class HUDLawnMower extends Gui {
+public final class HUDLawnMower extends Gui {
 	private final static ResourceLocation hud = new ResourceLocation("paraknight", "textures/gui/lawnmowerhud.png");
 	private final Minecraft game;
 	private int wave = 0;

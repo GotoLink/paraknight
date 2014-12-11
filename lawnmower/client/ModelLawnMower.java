@@ -5,7 +5,7 @@ import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.entity.Entity;
 
-public class ModelLawnMower extends ModelBase {
+public final class ModelLawnMower extends ModelBase {
 	public ModelRenderer blades;
 	public ModelRenderer[] lawnMowerSides = new ModelRenderer[5];
 

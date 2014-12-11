@@ -1,12 +1,12 @@
 package core;
 
+import cpw.mods.fml.common.network.IGuiHandler;
 import lawnmower.EntityLawnMower;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.World;
 import steambikes.EntitySteamBike;
-import cpw.mods.fml.common.network.IGuiHandler;
 
 public class CommonProxy implements IGuiHandler {
 	public static final int GUI = 160;

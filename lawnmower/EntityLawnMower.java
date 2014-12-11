@@ -1,5 +1,8 @@
 package lawnmower;
 
+import core.CommonProxy;
+import core.EntityChestBoat;
+import core.ModPack;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockTallGrass;
 import net.minecraft.entity.item.EntityItem;
@@ -9,9 +12,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeHooks;
-import core.CommonProxy;
-import core.EntityChestBoat;
-import core.ModPack;
 
 public class EntityLawnMower extends EntityChestBoat {
 	public float bladesAngle = ((float) Math.PI / 4F);

@@ -4,7 +4,7 @@ import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.model.ModelRenderer;
 import steambikes.EntitySteamBike;
 
-public class ModelSteamBike extends ModelBase {
+public final class ModelSteamBike extends ModelBase {
 	private ModelRenderer backAxis;
 	private ModelRenderer backTankConnector;
 	private ModelRenderer backWheel;

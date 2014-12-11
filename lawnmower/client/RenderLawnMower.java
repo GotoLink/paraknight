@@ -1,17 +1,15 @@
 package lawnmower.client;
 
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import lawnmower.EntityLawnMower;
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.ResourceLocation;
-
 import org.lwjgl.opengl.GL11;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
-
 @SideOnly(Side.CLIENT)
-public class RenderLawnMower extends Render {
+public final class RenderLawnMower extends Render {
 	private static final ResourceLocation blades = new ResourceLocation("paraknight", "textures/models/lawnmowerblades.png");
 	private static final ResourceLocation body = new ResourceLocation("paraknight", "textures/models/lawnmowerbody.png");
 	protected final ModelLawnMower modelLawnMower = new ModelLawnMower();
