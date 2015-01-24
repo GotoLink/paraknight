@@ -41,10 +41,7 @@ public class EntityTV extends Entity implements Runnable{
 
 	public EntityTV(World world) {
 		super(world);
-		tickCounter = 0;
-		direction = 0;
-		yOffset = 0.0F;
-		setSize(0.5F, 0.5F);
+		setSize(ModPack.width, ModPack.height);
 	}
 
 	public EntityTV(World world, int i, int j, int k, int l) {
@@ -80,14 +77,8 @@ public class EntityTV extends Entity implements Runnable{
 
 	public void setPosAndAABB(int orientation) {
 		direction = orientation;
-		prevRotationYaw = rotationYaw = orientation * 90;
-		float xSize = ModPack.width;
-		float ySize = ModPack.height;
-		float zSize = ModPack.width;
-		if (orientation == 0 || orientation == 2)
-			zSize = ModPack.HD?0.0625F:0.015625F;
-		else
-			xSize = ModPack.HD?0.0625F:0.015625F;
+		float xSize = getXSize();
+		float zSize = getZSize();
 		float xPosBlock = (float) xPos + 0.5F;
 		float yPosBlock = (float) yPos + 0.5F;
 		float zPosBlock = (float) zPos + 0.5F;
@@ -110,10 +101,29 @@ public class EntityTV extends Entity implements Runnable{
 			zPosBlock -= (zSize%2==0)?0.5F:0;
 			break;
 		}
-		yPosBlock += (ySize%2==0)?0.5F:0;
-		setPosition(xPosBlock, yPosBlock, zPosBlock);
+		yPosBlock += (ModPack.height%2==0)?0.5F:0;
+		setPositionAndRotation(xPosBlock, yPosBlock, zPosBlock, orientation * 90, 0);
+	}
+
+	private float getXSize(){
+		if(direction == 0 || direction == 2){
+			return ModPack.width;
+		}
+		return ModPack.HD?0.0625F:0.015625F;
+	}
+
+	private float getZSize(){
+		if(direction == 0 || direction == 2){
+			return ModPack.HD?0.0625F:0.015625F;
+		}
+		return ModPack.width;
+	}
+
+	@Override
+	public void setPosition(double x, double y, double z){
+		super.setPosition(x, y, z);
 		float offset = -0.00625F;
-		boundingBox.setBounds(xPosBlock - xSize/2 - offset, yPosBlock - ySize/2 - offset, zPosBlock - zSize/2 - offset, xPosBlock + xSize/2 + offset, yPosBlock + ySize/2 + offset, zPosBlock + zSize/2 + offset);
+		boundingBox.setBounds(x - getXSize()/2 - offset, y - height/2 - offset, z - getZSize()/2 - offset, x + getXSize()/2 + offset, y + height/2 + offset, z + getZSize()/2 + offset);
 	}
 	
 	@Override
