@@ -2,6 +2,7 @@ package tvmod;
 
 import core.ModPack;
 import cpw.mods.fml.common.registry.GameRegistry;
+import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -15,6 +16,7 @@ public final class ItemTVRemote extends Item {
 		setTextureName("tvmod:tvremote");
 		setUnlocalizedName("tvRemote");
 		setMaxStackSize(1);
+        setCreativeTab(CreativeTabs.tabDecorations);
         GameRegistry.registerItem(this, "tvRemote");
 	}
 	
@@ -22,7 +24,7 @@ public final class ItemTVRemote extends Item {
 	public ItemStack onItemRightClick(ItemStack itemstack, World world, EntityPlayer player) {
         if(world.isRemote) {
             MovingObjectPosition movingObjectPosition = ModPack.proxy.getMouseOver();
-            if(movingObjectPosition!=null && movingObjectPosition.entityHit instanceof EntityTV) {
+            if (movingObjectPosition != null && movingObjectPosition.entityHit instanceof EntityTV) {
                 EntityTV tv = ((EntityTV) movingObjectPosition.entityHit);
                 if (!tv.isVideoPlaying)
                     new Thread(tv, "TVMod Processing").start();
