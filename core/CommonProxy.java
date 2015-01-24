@@ -37,4 +37,8 @@ public class CommonProxy implements IGuiHandler {
     public MovingObjectPosition getMouseOver(){
         return null;
     }
+
+    public void tryCheckForUpdate() {
+
+    }
 }

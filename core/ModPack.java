@@ -1,10 +1,8 @@
 package core;
 
-import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.EventHandler;
 import cpw.mods.fml.common.Mod.Instance;
-import cpw.mods.fml.common.ModContainer;
 import cpw.mods.fml.common.SidedProxy;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
@@ -89,15 +87,8 @@ public final class ModPack {
         }
         if(config.hasChanged())
             config.save();
-        if(event.getSourceFile().getName().endsWith(".jar") && event.getSide().isClient()){
-            try {
-                Class.forName("mods.mud.ModUpdateDetector").getDeclaredMethod("registerMod", ModContainer.class, String.class, String.class).invoke(null,
-                        FMLCommonHandler.instance().findContainerFor(this),
-                        "https://raw.github.com/GotoLink/paraknight/master/update.xml",
-                        "https://raw.github.com/GotoLink/paraknight/master/changelog.md"
-                );
-            } catch (Throwable e) {
-            }
+        if(event.getSourceFile().getName().endsWith(".jar")){
+            proxy.tryCheckForUpdate();
         }
 	}
 }

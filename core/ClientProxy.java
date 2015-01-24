@@ -2,6 +2,8 @@ package core;
 
 import cpw.mods.fml.client.FMLClientHandler;
 import cpw.mods.fml.client.registry.RenderingRegistry;
+import cpw.mods.fml.common.FMLCommonHandler;
+import cpw.mods.fml.common.ModContainer;
 import lawnmower.EntityLawnMower;
 import lawnmower.client.HUDLawnMower;
 import lawnmower.client.RenderLawnMower;
@@ -26,5 +28,17 @@ public class ClientProxy extends CommonProxy {
     @Override
     public MovingObjectPosition getMouseOver(){
         return FMLClientHandler.instance().getClient().objectMouseOver;
+    }
+
+    @Override
+    public void tryCheckForUpdate(){
+        try {
+            Class.forName("mods.mud.ModUpdateDetector").getDeclaredMethod("registerMod", ModContainer.class, String.class, String.class).invoke(null,
+                    FMLCommonHandler.instance().findContainerFor(ModPack.instance),
+                    "https://raw.github.com/GotoLink/paraknight/master/update.xml",
+                    "https://raw.github.com/GotoLink/paraknight/master/changelog.md"
+            );
+        } catch (Throwable e) {
+        }
     }
 }
