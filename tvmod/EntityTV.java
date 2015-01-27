@@ -30,14 +30,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class EntityTV extends Entity implements Runnable{
-    public static ArrayList<String> videoPathes;
+    private static ArrayList<String> videoPathes;
 	private int tickCounter;
-	public int direction, xPos, yPos, zPos;
+	private int direction, xPos, yPos, zPos;
 	private String currentVideoPath;
 	public BufferedImage lastFrame, noSignal;
 	public IntBuffer frameIntBuffer;
 	private SourceDataLine soundLine;
-	public boolean isVideoPaused = false, shouldSkip = false, isVideoOver = false, isVideoPlaying = false;
+	private boolean isVideoPaused = false, shouldSkip = false, isVideoOver = false, isVideoPlaying = false;
 
 	public EntityTV(World world) {
 		super(world);
@@ -143,7 +143,7 @@ public class EntityTV extends Entity implements Runnable{
             if (isVideoOver) {
                 shouldSkip = false;
                 isVideoOver = false;
-                if (isVideoPaused) {
+                if (feedPaused()) {
                     isVideoPaused = false;
                     return;
                 }
@@ -352,7 +352,7 @@ public class EntityTV extends Entity implements Runnable{
 
 			IPacket packet = IPacket.make();
 			while(!shouldSkip&&!isDead)
-				if(!isVideoPaused) {
+				if(!feedPaused()) {
 					if(container.readNextPacket(packet)>=0) {
 						if(packet.getStreamIndex()==videoStreamID) {
 							IVideoPicture picture = IVideoPicture.make(videoCoder.getPixelType(), videoCoder.getWidth(), videoCoder.getHeight());
@@ -433,5 +433,24 @@ public class EntityTV extends Entity implements Runnable{
 			if (millisecondsToSleep > 0) {
 				try{Thread.sleep(millisecondsToSleep);}catch(InterruptedException ignored){}}
 		}
+	}
+
+	public void onRemoteClick(boolean playerSneaking) {
+		if (!isVideoPlaying)
+			new Thread(this, "TVMod Processing").start();
+		else if (playerSneaking) {
+			shouldSkip = true;
+			if (feedPaused())
+				lastFrame = noSignal;
+		} else
+			reversePause();
+	}
+
+	private synchronized void reversePause(){
+		isVideoPaused = !isVideoPaused;
+	}
+
+	public synchronized boolean feedPaused(){
+		return isVideoPaused;
 	}
 }

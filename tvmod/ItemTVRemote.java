@@ -25,15 +25,7 @@ public final class ItemTVRemote extends Item {
         if(world.isRemote) {
             MovingObjectPosition movingObjectPosition = ModPack.proxy.getMouseOver();
             if (movingObjectPosition != null && movingObjectPosition.entityHit instanceof EntityTV) {
-                EntityTV tv = ((EntityTV) movingObjectPosition.entityHit);
-                if (!tv.isVideoPlaying)
-                    new Thread(tv, "TVMod Processing").start();
-                else if (player.isSneaking()) {
-                    tv.shouldSkip = true;
-                    if (tv.isVideoPaused)
-                        tv.lastFrame = tv.noSignal;
-                } else
-                    tv.isVideoPaused = !tv.isVideoPaused;
+                ((EntityTV) movingObjectPosition.entityHit).onRemoteClick(player.isSneaking());
             }
         }
         world.playSoundAtEntity(player, "random.click", 0.1F, 0.1F);
